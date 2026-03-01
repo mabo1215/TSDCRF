@@ -1,0 +1,38 @@
+device: "cuda"          # "cpu" or "cuda"
+fp16: true
+
+yolox:
+  exp_file: null        # 可选：YOLOX exp 文件路径（高级用法）
+  ckpt_path: "weights/yolox_s.pth"
+  input_size: [640, 640]
+  conf_thre: 0.3
+  nms_thre: 0.45
+
+bytetrack:
+  track_thresh: 0.5
+  track_buffer: 30
+  match_thresh: 0.8
+  frame_rate: 30
+
+privacy:
+  enable: true
+  epsilon: 1.0
+  delta: 1.0e-5
+  sensitivity: 1.0
+  sigma_cap: 25.0        # 防止epsilon很小导致sigma极大
+  sensitive_classes: ["person"]   # 你可以扩展为 face/person/plate 等
+  apply_on: "bbox"       # "bbox" or "feature"（这里先实现bbox）
+
+ncp:
+  enable: true
+  mode: "class_weight"   # "class_weight" | "score_gate"
+  # class_weight: 对敏感类施加更强惩罚/扰动；对非敏感类尽量保留
+  sensitive_weight: 1.0
+  nonsensitive_weight: 0.2
+  # score_gate: 低置信度目标更容易被惩罚（过滤/加大噪声）
+  score_gate_thre: 0.35
+
+temporal:
+  enable: true
+  method: "kalman_smooth"  # 近似时序CRF：用卡尔曼 + 软一致性修正
+  alpha: 0.7               # 越大越相信历史轨迹

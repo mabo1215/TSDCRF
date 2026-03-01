@@ -1,0 +1,8 @@
+You are working in a research codebase: privacy-preserving object tracking with YOLOX + ByteTrack + DP noise + temporal smoothing.
+Rules:
+- Keep code runnable from CLI.
+- Prefer small, testable modules.
+- All public functions must have type hints and docstrings.
+- Never silently swallow exceptions; log with context.
+- Any change that affects output format must update README.
+- Respect config.yaml as single source of truth.
