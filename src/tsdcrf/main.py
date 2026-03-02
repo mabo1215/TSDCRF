@@ -116,8 +116,15 @@ def main():
     sensitive_names = set(pcfg_raw.get("sensitive_classes", ["person"]))
     privacy_enable = bool(pcfg_raw.get("enable", True))
 
-    cap = cv2.VideoCapture(0 if args.video == "" else args.video)
+    video_src = 0 if args.video == "" else args.video
+    cap = cv2.VideoCapture(video_src)
     if not cap.isOpened():
+        if args.video == "":
+            raise RuntimeError(
+                "Failed to open camera (device 0). "
+                "Check Windows: Settings → Privacy → Camera → allow desktop apps. "
+                "Or run with a file: --video path/to/video.mp4"
+            )
         raise RuntimeError(f"Failed to open video: {args.video}")
 
     writer = None
@@ -128,6 +135,20 @@ def main():
         fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
         writer = cv2.VideoWriter(args.save, fourcc, fps, (w, h))
 
+    show_gui = bool(args.show)
+    if show_gui:
+        try:
+            cv2.namedWindow("TSDCRF-YOLO11", cv2.WINDOW_NORMAL)
+        except cv2.error:
+            logger.warning(
+                "OpenCV GUI not available (headless build). "
+                "Install GUI build: pip uninstall opencv-python-headless; pip install opencv-python. "
+                "Skipping display."
+            )
+            show_gui = False
+
+    if show_gui:
+        logger.info("Press Q or ESC to exit.")
     logger.info("Start processing...")
     while True:
         ok, frame = cap.read()
@@ -182,15 +203,21 @@ def main():
 
         if writer is not None:
             writer.write(vis)
-        if args.show:
-            cv2.imshow("TSDCRF-YOLO11", vis)
-            if cv2.waitKey(1) & 0xFF == 27:
-                break
+        if show_gui:
+            try:
+                cv2.imshow("TSDCRF-YOLO11", vis)
+                key = cv2.waitKey(1) & 0xFF
+                if key == 27 or key == ord("q") or key == ord("Q"):
+                    break
+            except cv2.error:
+                logger.warning("OpenCV imshow failed (headless). Skipping display.")
+                show_gui = False
 
     cap.release()
     if writer is not None:
         writer.release()
-    cv2.destroyAllWindows()
+    if show_gui:
+        cv2.destroyAllWindows()
     logger.info("Done.")
 
 
