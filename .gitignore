@@ -85,3 +85,5 @@ venv/
 env/
 
 *.pt
+
+src/latex/*
