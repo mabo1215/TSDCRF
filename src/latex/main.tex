@@ -52,20 +52,14 @@
 
 
 \pdfinfo{
-/Title (TSDCRF:Time Series Differential Privacy-preserving Object Tracking for Conditional Random Field)
+/Title (TSDCRF: Balancing Privacy and Multi-Object Tracking via Time-Series CRF and Normalized Control Penalty)
 /Author (xxx)
-/TemplateVersion (2022.1)
-} %Leav
-
-
-% correct bad hyphenation here
-% \hyphenation{op-tical net-works semi-conduc-tor} 
+/TemplateVersion (2026.1)
+}
 
 %
 % paper title
-% can use linebreaks \\ within to get better formatting as desired
-% Do not put math or special symbols in the title.
-\title{TSDCRF:Time Series Dynamic Conditional Random Field for Privacy-preserving Object Tracking}
+\title{TSDCRF: Balancing Privacy and Multi-Object Tracking via Time-Series CRF and Normalized Control Penalty}
 
 % author names and affiliations
 % transmag papers use the long conference author name format.
@@ -104,11 +98,11 @@
 \author{Submission draft}
 \end{comment}
 
-\author{\IEEEauthorblockN{Bo Ma, Jinsong Wu, ~\IEEEmembership{Senior Member~IEEE} , Weiqi Yan, Catherine Shi, Minh Nguyen
+\author{\IEEEauthorblockN{Bo Ma, Jinsong Wu, ~\IEEEmembership{Senior Member~IEEE} , Weiqi Yan
 %Shuolin Hu\IEEEauthorrefmark{4}}
 \thanks{Corresponding author: Bo Ma}
-\thanks{Bo Ma with the School of Mathematics and Computer Engineering,
-Auckland University of Technology,Auckland  1024, New Zealand, email: rcn4743@aut.com. }
+\thanks{Bo Ma and Weiqi Yan are with the School of Mathematics and Computer Engineering,
+Auckland University of Technology,Auckland  1024, New Zealand, email: rcn4743@aut.ac.nz. }
 \thanks{Jinsong Wu is with Department of Electrical Engineering, University of Chile, Santiago, Chile, email: wujs@ieee.org}
 %\thanks{Xuyun Zhang is with School of Computer Science, Macquarie University, Sydney, Australia}
 }\\
@@ -158,10 +152,10 @@ Auckland University of Technology,Auckland  1024, New Zealand, email: rcn4743@au
 
 % \IEEEtitleabstractindextext{%
 \begin{abstract}
-Privacy protection and object tracking are inherently conflicting: perturbations that hide sensitive identities (e.g., faces) often break association consistency across frames, leading to ID switches and target loss. We propose TSDCRF, a time-series dynamic conditional random field refinement module for privacy-preserving multi-object tracking. The method injects calibrated noise into sensitive-region features under a given privacy budget, and introduces a Normalized Control Penalty (NCP) to suppress unstable class predictions and stabilize cross-frame association. Experiments on MOT16/17, Cityscapes, and KITTI show that TSDCRF improves robustness against trajectory hijacking and reduces tracking deviation while preserving privacy, achieving a better privacy--utility trade-off than representative noise baselines. The source code is available at https://github.com/mabo1215/TSDCRF.git.
+Multi-object tracking in video often requires appearance or location cues that can reveal sensitive identity information, while adding privacy-preserving noise typically disrupts cross-frame association and causes ID switches or target loss. We propose TSDCRF, a plug-in refinement framework that balances privacy and tracking by combining three components: (i) $(\varepsilon,\delta)$-differential privacy via calibrated Gaussian noise on sensitive regions under a configurable privacy budget; (ii) a Normalized Control Penalty (NCP) that down-weights unstable or conflicting class predictions before noise injection to stabilize association; and (iii) a time-series dynamic conditional random field (DCRF) that enforces temporal consistency and corrects trajectory deviation after noise, mitigating ID switches and resilience to trajectory hijacking. The pipeline is agnostic to the choice of detector and tracker (e.g., YOLOv4 and DeepSORT). We evaluate on MOT16, MOT17, Cityscapes, and KITTI. Results show that TSDCRF achieves a better privacy--utility trade-off than white noise and prior methods (NTPD, PPDTSA): lower KL-divergence shift, lower tracking RMSE, and improved robustness under trajectory hijacking while preserving privacy. Source code: https://github.com/mabo1215/TSDCRF.git.
 \end{abstract}
 \begin{IEEEkeywords}
-Object Tracking, Privacy-preserving, Time Series, Region of Interest
+Multi-object tracking, privacy-preserving, differential privacy, conditional random field (CRF), normalized control penalty (NCP), trajectory hijacking, MOT, Cityscapes, KITTI
 \end{IEEEkeywords}
 % }
 
@@ -225,7 +219,7 @@ Object Tracking, Privacy-preserving, Time Series, Region of Interest
 % and "HIS" in caps to complete the first word.
 %\IEEEPARstart{T}{he} 
 
-In tracking pipelines, the tracker must extract an appearance descriptor (or feature embedding) from the target region to associate identities across frames. If the sensitive region is heavily obfuscated or removed to protect privacy, the embedding becomes unreliable, which may degrade association accuracy and cause frequent ID switches~\cite{guo2021topology}. Unlike prior work that either sacrifices tracking quality for privacy or leaves sensitive data exposed, we propose a refinement module (TSDCRF) that injects calibrated noise and uses a time-series conditional random field (CRF) to preserve temporal consistency and reduce ID switches. Our approach is not specific to one tracker: it takes detector outputs and optional tracker outputs (e.g., from DeepSORT), and can be applied with other detection or tracking backbones. In addition, with the increasing popularity of autonomous driving technology, tracking the trajectory of the vehicle poses a problem for privacy protection. If the trajectory is used and forged by an attacker, it will cause massive interferences to the operation of the vehicle. For example, with the modification of the movement trajectory of the vehicle, the algorithm may incorrectly estimate its movement direction, since it collects the wrong target vehicle movement rules or even collides with a vehicle whose trajectory has been changed.
+Multi-object tracking in video relies on appearance or location cues that can leak sensitive identity information; at the same time, adding privacy-preserving noise to protect such information often disrupts cross-frame association and leads to ID switches or target loss~\cite{guo2021topology}. This conflict is acute in applications such as autonomous driving, where trajectory forgery or hijacking can mislead the system and cause safety risks. We propose TSDCRF (Time-Series Dynamic Conditional Random Field), a plug-in refinement framework that balances privacy and tracking by: (i) injecting calibrated $(\varepsilon,\delta)$-differentially private noise on sensitive regions; (ii) applying a Normalized Control Penalty (NCP) to stabilize class predictions before noise; and (iii) using a time-series CRF to enforce temporal consistency and correct trajectory deviation after noise, thereby mitigating ID switches and improving robustness to trajectory hijacking. The framework is agnostic to the underlying detector and tracker (e.g., YOLOv4 and DeepSORT). In the rest of this section we state the threat model, limitations of standard differential privacy in tracking, and our contributions.
 
 The data in Fig.~\ref{fig:tracking} are from MOT16~\cite{milan2016mot16}. The three images on the \emph{top} are consecutive frames; the three images on the \emph{bottom} show the segmentation and the movement trajectory after identifying the target. 
 
@@ -331,7 +325,7 @@ As illustrated in Fig.~\ref{fig:arc}, the proposed framework consists of: (i) an
 
 Generally, the incomplete data-sets problem occurs due to privacy noise interference. The data are polluted due to noise interference and are partially deleted by the pre-processing module. It is important to assess the block and image integrity for privacy class detection in image privacy searches. For example, if a region (e.g., a street image with details including faces) has all the features, an attacker can match a part of the features within the image. On the other hand, consistency requires identifying all relationships relevant to a given data set. However, in the training of the target detection model, it is necessary to check the integrity of the reconstructed data results in the reconstruction discrimination matrix of Fig.~\ref{fig:arc} to avoid lacking the training accuracy of the target detection model caused by the reconstructed data.
 
-In~\cite{bertino2005information}, a set of completeness and consistency evaluation methods were proposed. Unlike other earlier relevant works, \cite{bertino2005information} considered two more important aspects: the data's relevance and the data set's structure. Inspired by \cite{bertino2005information}, this paper combines aggregated information to evaluate the consistency via amplifying the correlation between the target data set and the data quality attributes of each aggregated information. At the same time, the formal description of each attribute involved in the aggregated information is just right. The attribute reflects on the label. On this basis, this paper proposes the missing measurement criteria (ML) as follows,}
+In~\cite{bertino2005information}, a set of completeness and consistency evaluation methods were proposed. Unlike other earlier relevant works, \cite{bertino2005information} considered two more important aspects: the data's relevance and the data set's structure. Inspired by \cite{bertino2005information}, this paper combines aggregated information to evaluate the consistency via amplifying the correlation between the target data set and the data quality attributes of each aggregated information. At the same time, the formal description of each attribute involved in the aggregated information is just right. The attribute reflects on the label. On this basis, this paper proposes the missing measurement criteria (ML) as follows,
 \begin{eqnarray}\label{equ:CMLdet}
 ML = \sum{RTree \cdot S_i\cdot IV} + \sum {RTree\cdot S_i\cdot ROW},
 \end{eqnarray}
@@ -401,7 +395,7 @@ where $i$ is the data item in the original data sets $A$, and $ f_A (i) $ is its
 The information loss is defined as the summation of the absolute errors between the frequency of occurrence of the data set containing no privacy noise data and the data composed of the calculated target region, and the matrix formed by the summation of errors can be formed with the frequency of the target region in the original data set. The ratio measures the proportion of errors in all data. Equation~\eqref{equ:lossrate} can also be used for algorithms to calculate the fraction of privacy-preserving data that use blocking techniques to insert uncertainty about certain sensitive data items or their dependencies into the dataset. The occurrence frequency of the sensitive data item $i$ can be used as a measure of the dataset $D'$ that does not contain privacy noises.
 The minimum frequency of this sensitive data item $i$ is obtained via averaging the maximum frequency of occurrences of sensitive classes in the object detection task.
 
-In the case of the exchange of information, the loss or cost of information caused by the heuristic algorithm can be evaluated by measured parameters, which are introduced in the exchange of values for obfuscation. If there are no correlations between different data-sets records, you can estimate the data confusions through the percentage of value replacement performed to hide specific information.}
+In the case of the exchange of information, the loss or cost of information caused by the heuristic algorithm can be evaluated by measured parameters, which are introduced in the exchange of values for obfuscation. If there are no correlations between different data-sets records, you can estimate the data confusions through the percentage of value replacement performed to hide specific information.
 
 % For the method based on multiplicative noise~\cite{liu2006random}, the matrix formed by random projection will affect the range of data perturbation. Through the inner product calculation, the data error due to the perturbation will be close to 0, and the space formed by the perturbation matrix will be reduced accordingly. The inner product result formed by the matrix transformation will reduce the error caused by the perturbation to achieve a value close to the ground truth in the loss function. The correlation between the inner product and the distance can be measured by the cosine angle of the two vectors and the correlation coefficient or the Euclidean distance. In the target detection task, the projection, as mentioned above, is used to directly analyze the error caused by searching the sensitive features.
 
@@ -418,7 +412,7 @@ If modifying the region of interest (ROI) in images includes aggregating some fe
 \begin{eqnarray}\label{ILformula}
 Information Loss(T^*)=\frac{\sum^{i=N_A}_{i=l} \sum^{i=N}_{j=l} \frac{h}{|GT_{A_i}|} }{|T|*|N_A|},
 \end{eqnarray}
-where $\frac{h}{|GT_{A_i}|}$ represents the loss of each paired feature vector, which means that the feature vector from one frame has to match the feature vector in another frame. For concealment techniques based on sampling methods, the quality is obviously related to the sample size under consideration, generally speaking, to its feature.}
+where $\frac{h}{|GT_{A_i}|}$ represents the loss of each paired feature vector, which means that the feature vector from one frame has to match the feature vector in another frame. For concealment techniques based on sampling methods, the quality is obviously related to the sample size under consideration, generally speaking, to its feature.
 
 \subsection{Information loss matrix}
 The motion tracking algorithm uses the cost function to measure the motion window generated by several time series frames and estimate the motion trajectory of the tracking target. At the same time, in the pre-task target detection, the IOU is used to measure the similarity of the generated target windows and select the most accurate window. Therefore, to prevent the trajectory hijacking mentioned in the threat model, we need to re-introduce a set of cost measurement methods to defend against the attacker's tampering with the motion trajectory. 
@@ -473,7 +467,8 @@ where $\widehat{\alpha_x}$ is the sampled point in matrix $x$ and $\beta$ is the
 \begin{aligned}
 \widehat{\alpha_x} (s+1|s) &= A \alpha_x (s|s), \\
 \widehat{\alpha_x} (s+1|s) &= \Sigma^{T-1}_{t=0} w^m_x \widehat{\alpha_x} (s+1|s), \\
-P(s+1|s) &= \Sigma^{T-1}_{t=0} w^c_x \big(\widehat{\alpha_x} (s+1|s) - \widehat{a}(s+1|s)\big) \big(\widehat{\alpha_x} (s+1|s) - \widehat{a}(s+1|s)\big)^T,
+P(s+1|s) &= \Sigma^{T-1}_{t=0} w^c_x \big(\widehat{\alpha_x} (s+1|s) - \widehat{a}(s+1|s)\big)\\
+&\quad\times \big(\widehat{\alpha_x} (s+1|s) - \widehat{a}(s+1|s)\big)^T,
 \end{aligned}
 \end{eqnarray}
 where $T=2r+1$ is the time window. Equation~\eqref{updatestatus1} gives the observation bounds; Eq.~\eqref{updatestatus2} gives the predicted state and covariance $P(s+1|s)$. The observation vector and matrix for valid measurements are $Z_{s,r} = [Z_{s,r_1} \ldots Z_{k,s_i}]^T$ and $h_{s,r} = [h_{s,r_1} \ldots h_{k,s_i}]^T$. Fig.~\ref{fig:generalpic} (Fig.~4) illustrates motion trajectory prediction under the CRF: the temporal model reduces position deviation after privacy or attack noise.
@@ -602,7 +597,7 @@ Fig.~\ref{fig:a9} shows the root-mean-square deviation of these four methods on 
 
 
 \section{Conclusion}
-We presented TSDCRF for privacy-preserving multi-object tracking, combining privacy-budgeted feature perturbation, NCP-based stability control, and time-series CRF refinement to reduce ID switches and trajectory deviation under privacy constraints and hijacking attacks.
+We presented TSDCRF, a framework that balances privacy and multi-object tracking by combining $(\varepsilon,\delta)$-differential privacy on sensitive regions, a Normalized Control Penalty (NCP) for stable association, and a time-series dynamic CRF (DCRF) for temporal consistency and trajectory correction. The method reduces ID switches and tracking deviation under privacy constraints and trajectory hijacking, and is compatible with standard detectors and trackers. Experiments on MOT16/17, Cityscapes, and KITTI show a better privacy--utility trade-off than white noise and prior baselines (NTPD, PPDTSA).
 
 \textbf{Limitations and future work.} When the detector's classifier is severely compromised (e.g., adversarial category confusion), association may still drift. Trajectory or gait analysis over time can in principle still infer identity~\cite{munsell2012person,andersson2015person,wu2017comprehensive,kusakunniran2013new}; we focus on perturbing ROI/appearance and bounding-box-level trajectory consistency rather than full gait anonymization. Future work will explore stronger adversarially robust classification, tighter privacy accounting for tracking, and mitigation of trajectory-based identity leakage.
 
