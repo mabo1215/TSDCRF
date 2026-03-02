@@ -25,7 +25,7 @@ COCO_CLASSNAMES = {
     6: "train",
     7: "truck",
     8: "boat",
-    # ... 省略：你需要可补全
+    # ... extend as needed (COCO 80 classes)
 }
 
 
@@ -123,7 +123,7 @@ def main():
 
         h, w = frame.shape[:2]
 
-        # 1) YOLOX detect
+        # 1) Detect (YOLO11)
         bboxes, scores, cls_ids = det.infer(frame)
 
         # 2) decide sensitive
@@ -171,7 +171,7 @@ def main():
         if writer is not None:
             writer.write(vis)
         if args.show:
-            cv2.imshow("TSDCRF-YOLOX", vis)
+            cv2.imshow("TSDCRF-YOLO11", vis)
             if cv2.waitKey(1) & 0xFF == 27:
                 break
 

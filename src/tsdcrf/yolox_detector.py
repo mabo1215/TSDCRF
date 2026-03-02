@@ -1,14 +1,23 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional
 import numpy as np
 import torch
 import cv2
 from loguru import logger
+from ultralytics import YOLO
 
 
 @dataclass(frozen=True)
 class YOLOXConfig:
+    """
+    Keeps original config field names for compatibility; implementation uses Ultralytics YOLO11.
+
+    - ckpt_path: YOLO11 weight path, e.g. "yolo11n.pt" or custom model path
+    - input_size: Kept for compatibility; scaling is handled by Ultralytics
+    - conf_thre: Confidence threshold for post-filtering
+    - nms_thre: Kept for compatibility (Ultralytics has built-in NMS)
+    - device / fp16: Handled by Ultralytics/torch; kept for config only
+    """
     ckpt_path: str
     input_size: tuple[int, int] = (640, 640)
     conf_thre: float = 0.3
@@ -18,37 +27,25 @@ class YOLOXConfig:
 
 
 class YOLOXDetector:
+    """
+    Public API unchanged: YOLOXDetector.load() + infer(frame_bgr);
+    internally uses Ultralytics YOLO11 for detection.
+    """
+
     def __init__(self, cfg: YOLOXConfig):
         self.cfg = cfg
-        self.model = None
-        self.cls_names = None
+        self.model: YOLO | None = None
 
     def load(self):
         """
-        Requires YOLOX installed:
-          pip install git+https://github.com/Megvii-BaseDetection/YOLOX.git
+        Load model using Ultralytics YOLO11 weights.
+
+        Install first: pip install ultralytics
+        Then set yolox.ckpt_path in config.yaml to YOLO11 weight path, e.g.:
+          "yolo11n.pt" or "weights/yolo11n.pt"
         """
-        from yolox.exp import get_exp
-        from yolox.utils import postprocess
-        from yolox.data.data_augment import preproc
-
-        self._postprocess = postprocess
-        self._preproc = preproc
-
-        exp = get_exp(None, "yolox-s")  # default exp name
-        model = exp.get_model()
-        ckpt = torch.load(self.cfg.ckpt_path, map_location="cpu")
-        model.load_state_dict(ckpt["model"] if "model" in ckpt else ckpt, strict=False)
-        model.eval()
-
-        if self.cfg.device == "cuda" and torch.cuda.is_available():
-            model = model.cuda()
-            if self.cfg.fp16:
-                model = model.half()
-
-        self.model = model
-        self.num_classes = exp.num_classes
-        logger.info(f"Loaded YOLOX from {self.cfg.ckpt_path}, num_classes={self.num_classes}")
+        self.model = YOLO(self.cfg.ckpt_path)
+        logger.info(f"Loaded YOLO11 model from {self.cfg.ckpt_path}")
 
     @torch.no_grad()
     def infer(self, frame_bgr: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -57,45 +54,36 @@ class YOLOXDetector:
         """
         assert self.model is not None, "call load() first"
 
-        img = frame_bgr
-        h0, w0 = img.shape[:2]
-        inp_h, inp_w = self.cfg.input_size
+        # Ultralytics expects RGB; convert BGR to RGB
+        img_rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
 
-        img_resized, ratio = self._preproc(img, (inp_h, inp_w), (0, 0, 0))
-        img_tensor = torch.from_numpy(img_resized).unsqueeze(0)  # [1,3,H,W]
-        img_tensor = img_tensor.float()
-        if self.cfg.fp16 and self.cfg.device == "cuda" and torch.cuda.is_available():
-            img_tensor = img_tensor.half()
-        if self.cfg.device == "cuda" and torch.cuda.is_available():
-            img_tensor = img_tensor.cuda()
+        # results: List[Results]; single image so take index 0
+        results = self.model(img_rgb, verbose=False)[0]
+        boxes = results.boxes
 
-        outputs = self.model(img_tensor)
-        outputs = self._postprocess(
-            outputs,
-            self.num_classes,
-            self.cfg.conf_thre,
-            self.cfg.nms_thre,
-            class_agnostic=True,
-        )[0]
-
-        if outputs is None or outputs.numel() == 0:
+        if boxes is None or boxes.shape[0] == 0:
             return (
                 np.zeros((0, 4), dtype=np.float32),
                 np.zeros((0,), dtype=np.float32),
                 np.zeros((0,), dtype=np.int32),
             )
 
-        outputs = outputs.float().cpu().numpy()
+        bboxes = boxes.xyxy.cpu().numpy().astype(np.float32)
+        scores = boxes.conf.cpu().numpy().astype(np.float32)
+        cls_ids = boxes.cls.cpu().numpy().astype(np.int32)
 
-        bboxes = outputs[:, 0:4]
-        scores = outputs[:, 4] * outputs[:, 5]
-        cls_ids = outputs[:, 6].astype(np.int32)
+        # Filter by conf_thre from config
+        if self.cfg.conf_thre is not None:
+            mask = scores >= float(self.cfg.conf_thre)
+            bboxes = bboxes[mask]
+            scores = scores[mask]
+            cls_ids = cls_ids[mask]
 
-        # map back to original scale
-        bboxes /= ratio
-        bboxes[:, 0] = np.clip(bboxes[:, 0], 0, w0 - 1)
-        bboxes[:, 2] = np.clip(bboxes[:, 2], 0, w0 - 1)
-        bboxes[:, 1] = np.clip(bboxes[:, 1], 0, h0 - 1)
-        bboxes[:, 3] = np.clip(bboxes[:, 3], 0, h0 - 1)
+        if bboxes.size == 0:
+            return (
+                np.zeros((0, 4), dtype=np.float32),
+                np.zeros((0,), dtype=np.float32),
+                np.zeros((0,), dtype=np.int32),
+            )
 
-        return bboxes.astype(np.float32), scores.astype(np.float32), cls_ids
+        return bboxes, scores, cls_ids
