@@ -1,0 +1,650 @@
+\documentclass[trans]{IEEEtran}
+
+\usepackage{times}  % DO NOT CHANGE THIS
+\usepackage{helvet} % DO NOT CHANGE THIS
+\usepackage{courier}  % DO NOT CHANGE THIS
+\usepackage{qtree} % just for figure example
+\usepackage{listings} % for using listings...
+\usepackage{xcolor}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{amsmath}%equation mutilrow align
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage[caption=false]{subfig}
+\usepackage{array}
+\usepackage{algorithm}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{comment}
+\usepackage{makecell}
+\newcommand*{\defeq}{\stackrel{\text{def}}{=}}
+\usepackage[justification=centering]{caption}
+
+\newcommand{\el}[1]{{\color{black}#1}}
+\newcommand{\rp}[2]{{\color{black}#2}}
+\newcommand{\sz}[3]{{\color{black}#3}}
+
+%\usepackage[noend]{algpseudocode}
+
+\usepackage{algpseudocode}
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{assumption}{Assumption}
+
+%\setcounter{page}{1}
+
+
+
+
+
+\pdfinfo{
+/Title (TSDCRF:Time Series Differential Privacy-preserving Object Tracking for Conditional Random Field)
+/Author (xxx)
+/TemplateVersion (2022.1)
+} %Leav
+
+
+% correct bad hyphenation here
+% \hyphenation{op-tical net-works semi-conduc-tor} 
+
+%
+% paper title
+% can use linebreaks \\ within to get better formatting as desired
+% Do not put math or special symbols in the title.
+\title{TSDCRF:Time Series Dynamic Conditional Random Field for Privacy-preserving Object Tracking}
+
+% author names and affiliations
+% transmag papers use the long conference author name format.
+
+% \author{Submission ID: 3593}
+
+
+% \begin{CCSXML}
+% <ccs2012>
+% <concept>
+% <concept_id>10010147.10010178.10010224.10010245.10010252</concept_id>
+% <concept_desc>Computing methodologies~Object identification</concept_desc>
+% <concept_significance>500</concept_significance>
+% </concept>
+% <concept>
+% <concept_id>10010147.10010178.10010224.10010245.10010248</concept_id>
+% <concept_desc>Computing methodologies~Video segmentation</concept_desc>
+% <concept_significance>300</concept_significance>
+% </concept>
+% <concept>
+% <concept_id>10010147.10010178.10010224.10010240.10010241</concept_id>
+% <concept_desc>Computing methodologies~Image representations</concept_desc>
+% <concept_significance>100</concept_significance>
+% </concept>
+% <concept>
+% <concept_id>10002978.10003029.10011150</concept_id>
+% <concept_desc>Security and privacy~Privacy protections</concept_desc>
+% <concept_significance>300</concept_significance>
+% </concept>
+% </ccs2012>
+% \end{CCSXML}
+
+\begin{document}
+
+\begin{comment}
+\author{Submission draft}
+\end{comment}
+
+\author{\IEEEauthorblockN{Bo Ma, Jinsong Wu, ~\IEEEmembership{Senior Member~IEEE} , Weiqi Yan, Catherine Shi, Minh Nguyen
+%Shuolin Hu\IEEEauthorrefmark{4}}
+\thanks{Corresponding author: Bo Ma}
+\thanks{Bo Ma with the School of Mathematics and Computer Engineering,
+Auckland University of Technology,Auckland  1024, New Zealand, email: rcn4743@aut.com. }
+\thanks{Jinsong Wu is with Department of Electrical Engineering, University of Chile, Santiago, Chile, email: wujs@ieee.org}
+%\thanks{Xuyun Zhang is with School of Computer Science, Macquarie University, Sydney, Australia}
+}\\
+
+
+ % stops an unwanted space
+% \thanks{Manuscript received March 20, 2026.}
+}
+ 
+
+\maketitle
+
+% The paper headers
+%\markboth{IEEE Transaction on Pattern Analysis and Machine Intelligence ,~Vol.~11, No.~4, March~2021}%
+%{Shell \MakeLowercase{\textit{et al.}}: Bo Ma of IEEEtran.cls for Journals}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+%
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2012 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+% for Transactions on Magnetics papers, we must declare the abstract and
+% index terms PRIOR to the title within the \IEEEtitleabstractindextext
+% IEEEtran command as these need to go into the title area created by
+% \maketitle.
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+%\IEEEtitleabstractindextext{%
+
+
+% \IEEEtitleabstractindextext{%
+\begin{abstract}
+Privacy protection and object tracking are inherently conflicting: perturbations that hide sensitive identities (e.g., faces) often break association consistency across frames, leading to ID switches and target loss. We propose TSDCRF, a time-series dynamic conditional random field refinement module for privacy-preserving multi-object tracking. The method injects calibrated noise into sensitive-region features under a given privacy budget, and introduces a Normalized Control Penalty (NCP) to suppress unstable class predictions and stabilize cross-frame association. Experiments on MOT16/17, Cityscapes, and KITTI show that TSDCRF improves robustness against trajectory hijacking and reduces tracking deviation while preserving privacy, achieving a better privacy--utility trade-off than representative noise baselines. The source code is available at https://github.com/mabo1215/TSDCRF.git.
+\end{abstract}
+\begin{IEEEkeywords}
+Object Tracking, Privacy-preserving, Time Series, Region of Interest
+\end{IEEEkeywords}
+% }
+
+
+
+% Note that keywords are not normally used for peerreview papers.
+%\begin{IEEEkeywords}
+%Noise Generalization,Conditional Random Field(CRF), Gaussian Kernel,Noise Sub-sampling,Differential Privacy,Normalized Control Penalty(NCP),Kullback-Leibler divergence, Renyi Entropy
+%\end{IEEEkeywords}}
+
+
+
+% make the title area
+
+\maketitle
+
+% To allow for easy dual compilation without having to reenter the
+% abstract/keywords data, the \IEEEtitleabstractindextext text will
+% not be used in maketitle, but will appear (i.e., to be "transported")
+% here as \IEEEdisplaynontitleabstractindextext when the compsoc
+% or transmag modes are not selected <OR> if conference mode is selected
+% - because all conference papers position the abstract like regular
+% papers do.
+%\IEEEdisplaynontitleabstractindextext
+% \IEEEdisplaynontitleabstractindextext has no effect when using
+% compsoc or transmag under a non-conference mode.
+
+
+
+
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+%\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps.
+%
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+%
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+%
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+%
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+%\IEEEPARstart{T}{he} 
+
+In tracking pipelines, the tracker must extract an appearance descriptor (or feature embedding) from the target region to associate identities across frames. If the sensitive region is heavily obfuscated or removed to protect privacy, the embedding becomes unreliable, which may degrade association accuracy and cause frequent ID switches~\cite{guo2021topology}. In addition, with the increasing popularity of autonomous driving technology, tracking the trajectory of the vehicle poses a problem for privacy protection. If the trajectory is used and forged by an attacker, it will cause massive interferences to the operation of the vehicle. For example, with the modification of the movement trajectory of the vehicle, the algorithm may incorrectly estimate its movement direction, since it collects the wrong target vehicle movement rules or even collides with a vehicle whose trajectory has been changed.
+
+The data resource in Figure~\ref{fig:tracking} is the pedestrian data from MOT16~\cite{milan2016mot16}. In Figure~\ref{fig:tracking}, for the tracking tasks, the three images on the left side are three sequence images extracted from consecutive frames in MOT16. After the images are segmented in real-time, the changes in the segmented area can be determined. Then, the object in the segmentation area determines its movement trajectory in three right images after identifying the target. 
+
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{images/050.jpg}
+	\caption{Segmentation and Tracking Results}\label{fig:tracking}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{images/051.jpg}
+	\caption{Tracking Result For Vehicle}\label{fig:tracking1}
+\end{figure}
+
+
+\begin{figure*}[ht!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/arc.jpg}
+	\caption{Architecture for Time Series Dynamic Conditional Random Field for Privacy-preserving Object Tracking}\label{fig:arc}
+\end{figure*}
+
+\subsection{Threat model}\label{sec:threat}
+We consider an adversary who can access the tracking outputs and intermediate representations (e.g., cropped ROI features) and aims to infer or spoof sensitive identity information.
+
+\subsubsection{Attack 1: Feature-stealing / identity spoofing}
+Given a sensitive ROI (e.g., a face) and its embedding $x$, the adversary attempts to reconstruct a spoofed representation $x'$ that matches the original identity under a verifier (e.g., face authentication~\cite{du2020cross,yan2022domain}). Our goal is to ensure that after privacy perturbation, $x'$ no longer preserves sufficient identity evidence to pass verification, while tracking association remains stable.
+
+\subsubsection{Attack 2: Track and hijack the target orbit}
+We assume that the adversary predicts the trajectory of the tracked target (e.g., a car) based on the time-series flow. Initially at time $t_0$, the adversary predicts the direction of the tracked target (e.g., to the left). At time $t_1$, the adversary posts an attack patch (e.g., on the back of the car), trying to trick the detector with two effects: (1) removing the bounding box of the target from the detection result, or (2) shifting the bounding box in a direction specified by the adversary. The constructed bounding box is then associated with the original trajectory in the tracking result, hijacking the trajectory and misleading the system. In a real scenario, the vehicle may crash into other vehicles or pedestrians. This second attack is real-time. Even if Attack 1 is mitigated, the user must be given a correct detection window in the first few frames so that the tracking framework can estimate the correct trajectory. The defense against the former cannot interfere with the tracking task (i.e., cannot affect the estimation of the target window). Therefore, this paper uses a time-series algorithm to compute the state of each target node from a global perspective to correct the wrong deviation of the target window and trajectory caused by the attack.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Limitations of Differential Privacy mechanism for object tracking}
+Some researchers have \el{ applied} the Gaussian distribution mechanism to remove the limitations~\cite{liu2018generalized} on the improved analysis of the statistical distribution with data and integrate this mechanism into the necessary process, others proposed Topology-Aware Differential Privacy~\cite{guo2021topology} to reduce the noise scale and improve the model usability in images recognition. Thus the image recognition system(object tracking recognized as one type of this system) can generate differential privacy protection algorithms from the region of interests (ROI), that ROI may cover the trajectory area. However, this process still needs to be improved. \el{ In the work~\cite{zhao2020novel}, Zhao has mentioned that removing or replacing individuals in the data set has a negligible effect on the output distribution, and the calculations on private data will not reveal sensitive information about the individuals in the dataset. Zhao also has} mentioned that differential privacy could only be directly or randomly applied in trajectory data once rationality and correctness are ensured in the data sets. 
+
+Based on the differential privacy, Dwork proposed the Theorem of the perturbation output of $(\varepsilon,\delta)$-differential privacy in~\cite{dwork2009complexity}. Namely, for any $(\varepsilon,\delta)\in (0,1),$ the Gaussian output perturbation mechanism $\sigma \leq \frac{\Delta p_2 log\frac{1.25}{\delta}}{\varepsilon}$  is $(\varepsilon,\delta)$-differential privacy.  \el{Thus we} unfold a natural question about tracking with differential privacy in Figure~\ref{fig:tracking}: 
+
+\begin{enumerate}
+    \item Does the value of $\delta$ in $(\varepsilon,\delta)$-differential privacy provides the minimum amount of noise required to obtain $(\varepsilon,\delta)$-differential privacy with Gaussian perturbations for tracking feature in inference images?
+    \item What is the performance change when $\varepsilon \geq 1$ with proposed privacy-preserving Dynamic Conditional Random Field?  
+\end{enumerate}
+
+We will unfold this topic and discuss both issues: 
+\begin{itemize}
+\item We try to find out the $\delta$ value for the local-optimal in the image tracking solution, i.e.,  $\varepsilon \rightarrow 0$.
+\item We then tackle the differential privacy problem of corrupted images and disturbing tracking algorithm according to integrating the Gaussian mechanisms with the conditional random field. 
+\item At the end, we show the large values for $\varepsilon$. The standard deviation of the Gaussian perturbation that provides $(\varepsilon,\delta)$-differential privacy must be scaled like $\Omega(\frac{1}{\sqrt{\varepsilon}})$. 
+%This means that the scaling $\Theta(\frac{1}{\sqrt{\varepsilon}})$ provided by the classical Gaussian mechanism in the range of $\varepsilon \in (0,1)$ cannot exceed any bounded interval.} Based on this concept, we sample the input data according to its entropy from the loss function and then generate the noise according to its probability distribution feature.  The noise can be injected into data for the next learning step through the conditional random field.
+    
+\end{itemize}
+
+
+\subsection{Contributions}
+We make the following contributions:
+
+\begin{enumerate}
+    \item We propose TSDCRF, a time-series dynamic CRF refinement that enforces temporal consistency under privacy perturbations and mitigates ID switches caused by sensitive-region obfuscation.
+    \item We introduce Normalized Control Penalty (NCP) to down-weight unstable or conflicting class predictions in privacy-sensitive regions, improving the privacy--utility trade-off in association.
+    \item We provide an empirical study on MOT16/17, Cityscapes, and KITTI, including distribution shift (KL-divergence) and tracking deviation (RMSE) under different privacy budgets, and evaluate robustness under trajectory hijacking.
+\end{enumerate}
+
+To support the above, we integrate Gaussian $(\varepsilon,\delta)$-differential privacy for the privacy features and use time-series methods to adjust the estimated trajectory when the attacker disrupts the inference. There are certain limitations for the Gaussian mechanism when $\varepsilon \rightarrow 0$~\cite{balle2018improving}; implementing differential privacy into existing object tracking thus requires careful design. Because privacy noise inevitably impacts association accuracy and may cause tracking targets to be lost, we use CRF-based refinement to mitigate perturbation and recover association. The following sections detail the pipeline, the CRF formulation, and the verification metrics.
+
+
+
+\section{Related Works}
+The main purpose of the privacy-preserving privacy object tracking task is to detect and track the target object while ensuring the privacy of the target. In this task, three parts are mainly involved. The first sub-task is object detection, the second sub-task is object tracking, and the third is privacy protection.
+
+For object detection, several deep learning methods have achieved very high accuracy and efficiency in detecting objects in videos. 
+
+In terms of speed and accuracy, the You Only Look Once (YOLO) model~\cite{farhadi2018yolov3,redmon2016you} is one of the latest deep neural network object detection methods. 
+YOLO is able to perform object detection for videos in embedded devices in real-time. Furthermore, it uses the evolved deep intelligence framework to evolve the YOLO network architecture and produce an optimized architecture.
+Like YOLO, SSD~\cite{liu2016ssd} is also a one-stage and end-to-end object detection method. 
+It directly classifies predefined anchors and uses convolutional neural networks for detection. 
+YOLO~\cite{farhadi2018yolov3} system has incorporated the multilayer prediction function found in SSD and introduced additional context information with deconvolution operators to improve accuracy.
+
+\subsection{Privacy-preserving in object detection}
+In object tracking, as long as the privacy of the detected objects in each frame is processed well, the privacy under global tracking can be handled well. Aiming at privacy protection in the target detection of the pre-task task of target tracking, Zhou~\cite{zhou2020personal} proposed the privacy protection method, using the MTCNN~\cite{zhang2016joint} model to locate sensitive positions, and correcting the affinity through anti-noise instead of removing sensitive information. In addition, Wang mentioned~\cite{wang2021dynamic} that videos in low resolution and fast motion scenes are still challenging, because the backbone network in convolutional neural network (CNN) may drop to insufficient performance in low-resolution scenes, and current convolutional neural networks cannot map and fit image datasets with poor quality and almost identical pixel information.
+
+
+\subsection{Object tracking in self-attention}
+In order to improve the detection accuracy when the video contains noise, there are generally two ways to apply the attention mechanism to maintain accuracy.
+This first one is per-channel attention and the second is a combination of channel and spatial attention.
+Squeeze-and-Excite (SE)~\cite{hu2018squeeze} shows excellent potential in efficiency through dimensionality reduction. However, capturing dependencies across all channels tends to increase computational complexity significantly. 
+Efficient Channel Attention (ECA)~\cite{qilong2020eca} acquires interaction across channels through a lightweight method. 
+Nevertheless, both of these methods disregard the spatial dimension. 
+The Bottleneck Attention Module (BAM)~\cite{park2018bam} and Convolutional Block Attention Module (CBAM)~\cite{woo2018cbam} adopt channel and spatial attention to refine convolutional features. 
+While the transformer can detect the object and classify the images according to its feature, protecting privacy according to a privacy budget is still a problem. The reason is that it is not easy to fit differential privacy sub-sampling with the Transformer framework.
+
+For multi-object tracking, Meinhardt~\cite{meinhardt2022trackformer}'s paper combines the self-attention mechanism to realize the association between data, and it uses the deformer to query the trajectory of the tracked target. Although this paper also uses the self-attention mechanism to establish the trajectory list of the target, in privacy protection, after adding privacy noise and encoding in the transformer model, the model is easy to confuse similar targets. To solve this problem, this paper uses the previous Several frames are associated, and similar classes are calculated and optimized through NCP penalties so that the model can distinguish similar tracking targets after encoding and decoding.
+
+\subsection{Tracking object lost problem}
+In terms of occlusion in multi-target tracking, Wang and Wu et al.~\cite{wang2021dynamic} proposed local and global search to perform dynamic object templates to solve the problem of tracking target occlusion loss. Their research solved the tracking objects loss problem by designing a dynamic attention-guided multi-trajectory tracking strategy. The contribution and difference of this paper are that by recognizing the object as a node in the time state sequence, when the object is added to the privacy-preserving noise, it can still be correlated with the previous object, and the privacy is restored through the penalty algorithm after adding protected noise so that objects that reappear after the privacy protection is masked or lost at the same time can be associated with the previously tracked target ID.
+
+
+\section{Trajectory integrity and consistency Check}
+\subsection{Pipeline overview}
+As illustrated in Fig.~\ref{fig:arc}, the proposed framework consists of: (i) an object detector (e.g., YOLOv4) that outputs bounding boxes and class scores; (ii) a baseline tracker (e.g., DeepSORT~\cite{theagarajan2020automated}) that performs data association using motion and appearance cues; (iii) a privacy module that perturbs sensitive-region features under a given privacy budget; (iv) TSDCRF refinement that models the cross-frame association as a time-series CRF and corrects association errors (e.g., ID switches) induced by privacy perturbations or adversarial trajectory hijacking.
+
+Generally, the incomplete data-sets problem occurs due to privacy noise interference. \el{ The data are polluted due to noise interference and are partially deleted by the pre-processing module. It is important  to assess the block and image integrity  for privacy class detection in image privacy searches. For example, if a region (e.g., a street image with details including faces) has all the features, an attacker can match a part of the features within the image. On the other hand, consistency requires identifying all relationships relevant to a given data set. However, in the training of the target detection model, it is necessary to check the integrity of the reconstructed data results in the reconstruction discrimination matrix of Figure ~\ref{fig:arc} to avoid lacking the training accuracy of the target detection model caused by the reconstructed data. 
+
+In~\cite{bertino2005information}, a set of completeness and consistency evaluation methods were proposed. Unlike other earlier relevant works, \cite{bertino2005information} considered two more important aspects: the data's relevance and the data set's structure. Inspired by \cite{bertino2005information}, this paper combines aggregated information to evaluate the consistency via amplifying the correlation between the target data set and the data quality attributes of each aggregated information. At the same time, the formal description of each attribute involved in the aggregated information is just right. The attribute reflects on the label. On this basis, this paper proposes the missing measurement criteria (ML) as follows,}
+\begin{eqnarray}\label{equ:CMLdet}
+ML = \sum{RTree \cdot S_i\cdot IV} + \sum {RTree\cdot S_i\cdot ROW},
+\end{eqnarray}
+where $RTree$ is a relationship tree (a type of directed graph) using a conditional random field, in which each node $ {S_i} $ is an attribute class, $IV$ is the integrity value, and $ROW$ is the consistency value. \el{ The lack of consistency (expressed as LC) is calculated by the multiplication of the penalty constraint violations in all sanitized transactions and the weight associated with each constraint.} This penalty constraint is multiplied by the constraint of each tracked object to be the weight of its penalty coefficient.
+\begin{eqnarray}\label{equ:CSLdet}
+\begin{aligned}
+LC = \sum{RTree\cdot TLC_i \cdot nv} + \sum{RTree \cdot TLC_i \cdot wc} \\
++ \sum{RTree \cdot DLC_j \cdot nv} + \sum{RTree \cdot DLC_j \cdot wc}
+\end{aligned}
+\end{eqnarray}
+where $nv$ represents the number of violations, $wc$ is the weight of the constraint, $ TLC_i $ describes the simple constraint class with $i$ items , and $ DLC_j $ describes the complex constraint class with $j$ items.
+
+In the tracking task, if the tracking objects that have been lost are cleaned up and found,  \el{ the last positions of these lost objects may have a better correlation and impact} on the results. Here, the user can add location attributes to these IDs to check the correlation between the same ID in different frames or classify the existing missing tracking objects to find the accurate classification of the newly-appearing objects. 
+
+According to the expected occurrence of tracking objects, specific metrics are used to measure the loss of these objects. We define a linear-chain CRF over the trajectory label sequence $\mathbf{l}=\{l_t\}_{t=1}^T$ conditioned on observations $\mathbf{o}=\{o_t\}_{t=1}^T$:
+\begin{eqnarray}\label{equ:Stt}
+P(\mathbf{l} \mid \mathbf{o}) = \frac{1}{Z(\mathbf{o})} \exp\Big( \sum_{t=1}^T \psi_u(l_t, o_t) + \sum_{t=2}^T \psi_p(l_{t-1}, l_t, o_{t-1}, o_t) \Big),
+\end{eqnarray}
+where $o_t$ includes motion cues and (privacy-perturbed) appearance features at frame $t$; $\psi_u$ is the unary term (confidence / NCP-weighted class consistency), and $\psi_p$ is the pairwise term that enforces temporal smoothness and discourages ID switches. The normalization factor $Z(\mathbf{o})$ sums over all label sequences. Objects with lost tracking IDs can be re-associated by inferring under this CRF. The tracking ID condition can be calculated as
+\begin{eqnarray}\label{equ:Medet}
+M_e = \frac{1}{N} \sum^{k}_{i=1} (|FI_i(pv)|-|FI_i(pv')|),
+\end{eqnarray}
+where $N$ represents the similarity rate from the existing ROI, $k$ is the number of searches analyzed,  $|FI_i(pv)|$ represents the number of frequent data sets for privacy, and $|FI_i(pv')|$  is the number of frequently purified data-sets for privacy, and the purified data set as $pv'$. Since privacy protection technologies usually modify data for cleaning purposes, the parameters involved in search analysis are almost inevitably affected. Therefore, to measure the privacy level of detected objects from predefined sensitive (privacy) classes, it is desired to use classified results with the sensitive classes consistently before and after applying privacy noise generation and insertion techniques.
+
+When we need to quantify the sequence images with their \el{ IL (information loss) value, it is helpful to indicate the percentage of missing parts that is a non-sensitive pattern (i.e., association, classification rule) that is a side effect of the hiding process. In addition, the extracted information indicates the extra manual information that protects the percentage of manual modes}. In ~\cite{oliveira2002privacy}, Oliveira defined two measures to detect the missed costs via manual mode, and the missed costs correspond to the missing and manual information, respectively. In particular, leakage costs include the increased difficulty of processing hidden unrestricted blocks caused by privacy noise during image cleaning. By cleaning the privacy noise, we can measure the cost of failure (CF) for protecting privacy leakage by comparing the events of target data processing before and after cleaning. The mean cost with privacy leakage is given by
+\begin{eqnarray}\label{equ:MCdet}
+MC = \frac{T~R_p(D)-T~R_p(D')}{T~R_p(D)},
+\end{eqnarray}
+where $T~R_p(D)$ and $T~R_p(D')$ represent the original data set $D$ and purified data set $D'$ respectively. In the best case, the loss rate is close to 0\%. \el{There is a trade-off between the probability of privacy protection being attacked and the object tracking accuracy rate.}
+
+\el{
+The cost of failure (CF) is calculated as}
+\begin{eqnarray}\label{equ:MCdet2}
+CF = \frac{ \sum{RTree \cdot R_p(pv)}-T \cdot R_p(pv')}{ \sum{RTree \cdot R_p(pv)}},
+\end{eqnarray}
+\el{where $RTree \cdot R_p(pv)$ and $RTree \cdot R_p(pv')$ represent the number of unrestricted patterns with conditional random field and the target vectors (data-sets) from the original vectors $pv$ and the purified vectors $pv'$, respectively. In the best case, the cost of failure should be 0\%. Note that the proposed method has a trade-off between the cost of failure and the privacy budget. The more privacy budget they invest, the more failure-recognized patterns lead to. The other measurement matrix and average precision (AP) are measured according to the percentage of the discovery mode as artifacts}, given by
+\begin{eqnarray}\label{equ:APdet}
+AP = \frac{\Sigma|P|}{R_p (pv')},
+\end{eqnarray}
+\el{ where $\Sigma|P|$ represents the summation of detection accuracy $P$, and $R_p (pv)$ is the detection frequency for purified vector $pv'$. According to their experiments, if the method does not have any artificial pattern label, $AP$ is always 0.}
+
+\el{ In the task of tracking correlation, the lost tracked target can extract all the coordinate sets of the lost target from all the frames where the lost target appears before the lost frame, and establish the loss rule, and all the lost rules that can track the ID trajectory are established, which represents the collection of lost trajectories, this process we called the ghost rule.} Predicting the future trajectory and detecting all objects around the predicted trajectory can help track the lost target in situations such as occlusion and establish the association set of the suspected missing object.
+
+Similarly, if the purpose of tracking the lost target is to find the lost target and re-establish the association, \el{ such as arranging all the detected targets in the predicted trajectory area into the spanning tree, we establish the lost rule for the lost target and evaluate the formation of the lost target. The cost of all calculations can be quantitatively evaluated through the ghost association rules. These measures allow privacy protection algorithms to associate tracking targets via inferring suspected tracking targets. For $\varepsilon$-differential privacy, the tracked bounding box tuples $T$ results are the same as the tracking results without privacy preservation.}
+
+\section{Dynamic Conditional Random Field and Loss Function Measurement} \label{informationlossmodel}
+Motion trajectory estimation needs to be established so that the target window covers the area of the tracked object relatively accurately in consecutive frames. If the target window accuracy and coverage position of consecutive frames are accurate, the tracking accuracy will be improved accordingly. Before discussing tracking accuracy and what kind of data can be used to measure and protect tracking trajectories, this paper first introduces a concept, namely data accuracy. Data accuracy is closely related to data distortion caused by privacy protection: the less data distortion, the less accuracy deviation, and the better the data quality is. Data accuracy depends highly on the privacy categories that are protected during the tracking process. For improving data accuracy, we need to analyze the accuracy of these privacy protection algorithms based on different modified technologies. For the measurement of information loss, if the techniques utilize perturbation or blocking to hide the original data or clustered data, it can be found that the differences between the original data $D$ and the sanitized data $D'$, in addition, the information loss value can be calculated from the differences between  $D$ and  $D'$.
+
+\section{Dynamic Conditional Random Field}
+Dynamic conditional random field (DCRF)~\cite{sutton2004dynamic} is a conditional random field (CRF) of linear chain nature. Each node in the chain represents a time slice, and a time slice contains a set of state variables and corresponding edges and corresponding sums Parameters are bound across slices. In the task based on target tracking, the tracked target can be classified into a series of slice tasks, so the performance of DCRF in tracking is better than that of a series of linear chain CRF, and the number of parameters and cost can be halved.  Assuming that the distribution of a detection target at time $t$ is $D$, on the target trajectory vector $(A, A')$, it can be written as:
+\begin{eqnarray} \label{equ:dcrfa}
+D(A'|A) = \frac{1}{Z(A)} \sum_t \sum_{i\in I} exp (\Sigma_i  \epsilon_i f_i (A'_{t,I}x,t))
+\end{eqnarray}
+where $D(A) $ is the function to divide the time slide $t$. The features of the tracked target on DCRF form a feature set $f_i (A'_{t,I}x,t)$. On the feature set, an index can be established according to the time $t$, and the index on its feature set Both establish corresponding features $f_i $ and weights $(x,t)$. By establishing an index for each state, the tracked target is tracked by establishing a DCRF in each frame in which the target exists, and its feature $f_i $ corresponds to the confirmed detection object corresponding with each other.
+
+
+
+\subsection{Information loss for model}
+
+In \cite{tai2009reversible}, the authors measured the difference between the original image and the processed image through a pixel loss sampling method, which was then used in their histogram modification method. After they formed structured data by constructing the pixels of the image, they compared the frequency histograms of the unprocessed and processed images to obtain loss information.
+Inspired by \cite{tai2009reversible}, we also use a histogram-based measure of information loss rate to measure the loss caused by adding privacy noise, calculated as follows:
+\begin{eqnarray} \label{equ:lossrate}
+LossRate(A,A')= \frac{\sum_{i=1}^n |f_A (i)-f_A' (i)|}{ \sum_{i=1}^n f_A (i)},
+\end{eqnarray}
+where $i$ is the data item in the original data sets $A$, and $ f_A (i) $ is its frequency in the input data sets, and $i$ is given after the application of privacy protection technology. For the $i$-th data item, $ f_A '(i) $ is the frequency of its new appearance in the data sets $A$ after privacy protection processing. 
+The information loss is defined as the summation of the absolute errors between the frequency of occurrence of the data set containing no privacy noise data and the data composed of the calculated target region, and the matrix formed by the \el{ summation  of errors can be formed with the frequency of the target region in the original data set. The ratio measures the proportion of errors in all data. The equation (\ref{equ:lossrate}) can also be used for algorithms to calculate the fraction of privacy-preserving data that uses blocking techniques to insert uncertainty about certain sensitive data items or their dependencies into the dataset. The occurrence frequency of the sensitive data item $i$ can be used as a measure of the dataset $D'$ that do not contain privacy noises.
+The minimum frequency of this sensitive data item $i$ is obtained via averaging the maximum frequency of occurrences of sensitive classes in the object detection task.
+
+In the case of the exchange of information, the loss or cost of information caused by the heuristic algorithm can be evaluated by measured parameters, which are introduced in the exchange of values for obfuscation. If there are no correlations between different data-sets records, you can estimate the data confusions through the percentage of value replacement performed to hide specific information.}
+
+% For the method based on multiplicative noise~\cite{liu2006random}, the matrix formed by random projection will affect the range of data perturbation. Through the inner product calculation, the data error due to the perturbation will be close to 0, and the space formed by the perturbation matrix will be reduced accordingly. The inner product result formed by the matrix transformation will reduce the error caused by the perturbation to achieve a value close to the ground truth in the loss function. The correlation between the inner product and the distance can be measured by the cosine angle of the two vectors and the correlation coefficient or the Euclidean distance. In the target detection task, the projection, as mentioned above, is used to directly analyze the error caused by searching the sensitive features.
+
+% If modifying the data includes aggregating some data values, the loss of information is given by the result of the loss in the data. Intuitively, in this case, in order to perform the hidden operation, the mining privacy protection data algorithm uses some type of "generalization or aggregation scheme", which can be ideally modeled as a tree scheme. Each cell modification applied during the clean-up phase using the general tree introduces data perturbations that reduce the general accuracy of the data-sets. As in the case of the k anonymous algorithm proposed in~\cite{sweeney2002achieving}, we can use the formula~\ref{ILformula}. Given a data-sets $ T $ with $ N_A $ fields and $ N $ transaction transactions, if we identify the domain generalized graded GT with depth h as a generalization scheme, we can measure the cleaned data-sets $T^*$ The information loss (IL) is:
+
+
+From the aspect of the exchange of entropy, the cost or loss of entropy caused by the heuristic algorithm can be evaluated \el{ via measuring parameters introduced in the exchange of values for obfuscation. For example, we assume that there are no correlations among the region of interest (ROI) corresponding to the objects in different tracked frames. In that case, the data confusion caused by external interferences can be estimated by replacing their corresponding correlation values to protect the privacy of specific objects.
+
+For multiplicative noises~\cite{liu2006random},} the size of the random projection matrix reflects the quality of the disturbance data. 
+\el{ When the average value of the error boundary of the inner product matrix formed by perturbation interference approaches to 0, the reciprocal of the spatial dimension observed in the eigenvector can be used as the variance. When the dimension of the random projection matrix is close to that of the original image data, the matrix's inner product generated by the image data transformation or projection is also closer to its actual value, and the error is negligible.
+Since the inner product here is closely related to the related distance measures used in tracking methods such as Deepsort, Euclidean distance, Hungarian distance, and the relationship between the feature and the processed noise image, If we directly analyze the tracking error, it may bias the matching results of tracked objects between different frames. Of course, if effective processing is carried out in the early stage, these deviations can be controlled in the measured value of the distance instead of reflecting the final tracking result.}
+
+%
+%if we directly analyze these tracking errors that may limit the matching results of the tracked objects between different frames,  this  can be controlled on the distance-based measurement value instead of the final tracking result.
+
+If modifying the region of interest (ROI) in images includes aggregating some feature points in ROI, the loss of information is given by the result of the loss in the data. Intuitively, in this case, to create the relationship between different frames, the same feature vectors extracted from different frames will utilize a "generalization or aggregation scheme" to find out the same objects in different frames, which can be ideally modeled as a tree scheme. Each cell modification applied during the clean-up phase using the general tree introduces data perturbations that reduce the general accuracy of the data sets. \el{ As in the $k$ anonymous algorithm proposed in~\cite{sweeney2002achieving}, (\ref{ILformula}) can be used to sort and protect the features vectors for the proposed privacy protection. For example, for a data-sets $ T $ with $ N_A $ fields and $ N $ transaction transactions, if we identify the domain generalized graded $GT$ with depth $h$ as a generalization scheme, we can measure the cleaned datasets $T^*$ The information loss (IL) is given by
+\begin{eqnarray}\label{ILformula}
+Information Loss(T^*)=\frac{\sum^{i=N_A}_{i=l} \sum^{i=N}_{j=l} \frac{h}{|GT_{A_i}|} }{|T|*|N_A|},
+\end{eqnarray}
+where $\frac{h}{|GT_{A_i}|}$ represents the loss of each paired feature vector, which means that the feature vector from one frame has to match the feature vector in another frame. For concealment techniques based on sampling methods, the quality is obviously related to the sample size under consideration, generally speaking, to its feature.}
+
+\subsection{Information loss matrix}
+The motion tracking algorithm uses the cost function to measure the motion window generated by several time series frames and estimate the motion trajectory of the tracking target. At the same time, in the pre-task target detection, the IOU is used to measure the similarity of the generated target windows and select the most accurate window. Therefore, to prevent the trajectory hijacking mentioned in the threat model, we need to re-introduce a set of cost measurement methods to \el{ defend} the attacker's tampering with the motion trajectory. 
+
+\el{ We are inspired by the idea of the general loss measure (LM)\cite{iyengar2002transforming}. We assume that $T$ is the bounding box set with $n$ as its confidence score or attributes. The LM metric is considered to be the average information loss of all data units of a given data set, which is defined as
+\begin{eqnarray}\label{LMformula}
+LM(T^*)=\frac{\sum^{n}_{i=l} \sum^{|T|}_{j=l} \frac{f(T*[i][j])-1}{G(A_i)-1} }{|T|*|N|},
+\end{eqnarray}
+where $T^*$ is the result of bounding box sets $T$ processed by Gaussian noise for privacy propose, $f$ is a function of the given data unit value $ T * [i] [j] $, and the return value of (\ref{equ:lossrate}) can be generalized to the number of different bounding box sets of $ T * [i] [j] $, $g$ is a given attribute of $A_i$, and this attribute can be matched to the index value of $A_i$.}
+
+\subsection{Classification metric for candidate privacy areas}
+\el{ Then we propose the concept of classification metric (CM) to optimize the feature vector for training classifiers. Each row in the CM matrix here represents a single penalty coefficient, and finally, the algorithm processes the penalty coefficient by normalizing the total number of rows $N$. The classification metric (CM) matrix is calculated as   
+\begin{eqnarray}\label{CMformula}
+CM(T^*)=\frac{\sum_{\forall rows} penalty(row_r) }{N},
+\end{eqnarray}
+where $row_r$ is the penalty value of a single row, and initially, 1, if the label of $row_r$ is not a multi-type label, the penalty value will increase. Otherwise, the penalty value of the $r$-th row will drop to 0.} Thus, this type of classifier performs well when used on feature vectors.
+
+\subsection{Trajectory Discernible matrix}
+\el{ Another interesting metric is the discernible metric (DM)\cite{bayardo2005data} proposed by Bayardo and Agrawal.} For the discrimination matrix, each tuple corresponds to a penalty coefficient, and the value of the penalty coefficient is based on whether the tuple transformation data set can distinguish its tuple from other tuples. 
+
+Our proposed solution utilizes DM to process the bounding box tuples within the tracking task. \el{ Let $t$ be a tuple from the original bounding box sets (without tracking connections in different frames) $T$, and let $G_T^*(t)$ be the set of tuples in the bounding box sets $ T^* $, which cannot be distinguished from $t$, or the tuple in $T^*$. The set of groups is equivalent to the index of frame $t$. Then DM is defined as
+\begin{eqnarray}\label{DMformula}
+DM(T^*)=\sum_{t \in T} G_{T^*} (t),
+\end{eqnarray}
+where, in the tuple $G_{T^*} (t)$,} if the Bounding Box $t$ is suppressed by non-maximum suppression (NMS), the size of $GT*(t)$ is the same as the size of $T*$. In many cases, suppression is considered as the most efficient method to select the accuracy bounding box for objects' regions in the object detection task. Therefore, to maximize the accuracy of object tracking, however, suppression tuple (sets) of the bounding box should be avoided as much as possible if an attacker has hijacked the tracking orbit because the result of the bounding box may \el{ be deviated} from the correct position of the target object after being attacked.
+
+For a given metric $M$, if $M(T)>M(T')$, it can be considered that $T$ has higher information loss than $b$ or $T$ has lower accuracy. In other words, the data quality of \el{ $T$ is worse than that of $T$? Is this applied to all indicators? What is an excellent metric to discriminate the correct object bounding box in series frames? Answering these questions takes work. As shown in \cite{nergiz2007thoughts},} CM is better than LM in classification applications. In addition, LM's determination of semantic segmentation is also conducive to the association of different frames of target tracking. To judge the accuracy and robustness of the metric, it is necessary to test the target association and track target area matching in the tracking task.
+
+CM metrics and information gain privacy loss ratios are more interesting than~\cite{bertino2005information}~\cite{sweeney2002achieving},  \el{ since  they consider the possible tracking applications of data. However, the implementation objectives must be clarified to build a classifier on various attributes. In addition, if the data are intended to be used to construct a classifier, these two indicators will work properly.} Is there a utility indicator for tracking applications? With this in mind, Kifer~\cite{kifer2006injecting} proposed a utility metric related to the Kullback-Leibler divergence, \el{ which, in theory,  can produce a better-protected data set. The researchers measured the utility of the resulting protected data set. Preliminary results showed that this metric was excellent in adjusting tracking orbit.}
+
+If a statistical-based perturbation technique is used to hide the value of a privacy attribute, \el{ the original distribution function estimated for a given attribute will predict its loss function, and its accuracy will be reduced. In   ~\cite{sweeney2002achieving} by Sweeney, it was} mentioned that the definition $f_X(x)$ is the density function of the estimated attribute $X$. In the reconstruction process of $f_X(x)$, the information loss can \el{ be calculated as}
+\begin{eqnarray}\label{IFLLformula}
+I(f_X,\widehat{f_X})=\frac{1}{2} E[\int_{\Omega_X} |f_X(x)  - \widehat{f_X}(x) | dx ].
+\end{eqnarray}
+
+There is a norm $l_1$ between $f_X(x)$ and the privacy-treated function $\widehat{f_X}(x)$, the expected value of the norm is half of $f_X(x)$, and the expected values are the density distribution before and after processing \el{ based on} the privacy protection algorithm. Thus, the quality of the tracking records stored at each site is not affected at all.
+
+\begin{figure}[!ht]
+	\centering
+	% Requires \usepackage{graphicx}
+	\includegraphics[width=0.5\textwidth]{images/general2.png}
+	\caption{Motion Trajectory Prediction with Conditional Random Field}\label{fig:generalpic}
+\end{figure}
+
+\subsection{Update tracking status of bounding box}
+Due to the limited range of image positioning, there is usually some deviation between the bounding boxes of the targets. To efficiently track the target object based on the available measurements, \el{ we propose the deep probe expedition (DPE) method in the model, which selectively fuses the valid measurement locations. We assume that there is a prediction matrix with valid measurements. The new observation vector and observation matrix are
+\begin{eqnarray}\label{updatestatus1}
+\widehat{\alpha_x} = [ a\vec{a} + \beta \sqrt{T_{a\vec{a}} } \vec{a} - \beta \sqrt{T_{a\vec{a}}}  ],
+\end{eqnarray}
+where the $\widehat{\alpha_x}$ is the sampled point in matrix $x$ and $\beta$ represent the covariance of $a$. Since the noise against orbital attacks is added to the model, the tracking position of the bounding box is somewhat deviated. To reduce its position deviation, the iterative estimation is provided}
+\begin{eqnarray}\label{updatestatus2}
+\begin{aligned}
+\begin{array}{ll}
+\widehat{\alpha_x} (A \alpha_x s+1|s) = A \alpha_x ( s|s) \\
+\widehat{\alpha_x} (A \alpha_x s+1|s) = \Sigma^{T-1}{t=0} w^m_x \widehat{\alpha_x} (A \alpha_x s+1|s) \\
+P(s+1|s) = \\
+\Sigma^{T-1}_{t=0} w^c_x (\widehat{\alpha_x} (s+1|s) - \\
+\widehat{a}(s+1|s) ) (\widehat{\alpha_x} (s+1|s) - \widehat{a}(s+1|s) )^T,
+\end{array}
+\end{aligned}
+\end{eqnarray}
+where $P(s+1|s)$ is the sample number in time $T$ has $T = 2r+1$. During the state updating process, the observation vector and the observation
+matrix of the sensors with valid measurements \el{  are
+\begin{eqnarray}\label{updatestatus3}
+Z_{s,r} = [Z_{s,r_1} \dots Z_{k,s_i} ]^T \\
+h_{s,r} = [h_{s,r_1} \dots h_{k,s_i} ]^T .
+\end{eqnarray}
+}
+
+
+\begin{figure*}[ht!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/TraMOT.png}
+	\caption{The performance of the proposed methods. (a) Defense under trajectory hijacking attack; (b) defense under blind target object detection attack.}
+	\label{fig:obpwr4}
+\end{figure*}
+
+
+\begin{figure*}[ht!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/18.png}
+	\caption{Comparison of sensitive area distributions}\label{fig:18}
+\end{figure*}
+
+The above discussion briefly describes our proposed NCP method, which is applied to the model of this paper to achieve target tracking while protecting privacy. Next, we introduce fusion experiments and other methods to demonstrate the effectiveness of this method.
+
+\section{Experiments}
+
+\el{We evaluate the performance of the proposed method based on a machine equipped} with CPU Intel Core (TM) i7 @2.4 GigaHertz (GHz), Windows 10 (64 bits) operating system, 8 GigaBytes (GB) RAM, and GeForce RTX 3070 Graphics Card with CUDA version 11.0. The data labels and test images were obtained from MOT Challenge 2016 and 2017 data-sets~\cite{milan2016mot16}. 
+
+\textbf{Metrics.} We report GIoU for localization, objectness score for detection confidence, classification accuracy for label stability, and mAP@0.5 for detection performance.
+
+\textbf{Attack settings.} (a) Trajectory hijacking; (b) blind target object detection~\cite{jia2020fooling}. The proposed method is integrated with YOLOv4~\cite{bochkovskiy2020yolov4} for detection and DeepSORT for tracking. We run each setting for 200 frames at 30 FPS and average results over 20 clips.
+
+\begin{itemize}
+    \item Figure~\ref{fig:obpwr4}(a): Under trajectory hijacking, GIoU on average decreases from 0.08 to 0.03 and objectness~\cite{alexe2012measuring} from 0.016 to 0.01. Classification (correct class assignment) and mAP@0.5 reflect detection and label stability under the attack.
+    \item Figure~\ref{fig:obpwr4}(b): Under blind target object detection attack, GIoU decreases from 0.054 to 0.012 after 200 frames and objectness from 0.008 to 0.003. With the classifier disrupted (category changed), classification drops from 0.04 to 0.02; our solution does not fully defend this attack (future work). This attack has limited impact on detection and tracking accuracy---$mAP_{0.5}$ can still approach 0.5---but may cause the adversary to extract wrong features from sensitive classes (e.g., face) since targets are assigned to wrong classes.
+\end{itemize}
+
+Comparing the target tracking architecture based on the target tracking task without using the privacy protection method and the architecture proposed in this paper~\cite{cheng2014bing}. At the same time, the two methods perform the sensitive areas and sensitive classes in (a) and (b), respectively. After processing, we \el{ conclude} that the impact of the method proposed in this paper on the accuracy of the prediction target tracking results has a small gap in each index.
+
+
+
+\begin{figure*}[htp!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/12.png}
+	\caption{Comparison of degree distribution and related parameter \el{ $k$} }\label{fig:12}
+\end{figure*}
+
+
+
+\begin{figure*}[htp!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/13.png}
+	\caption{Comparison of degree distribution and sampling steps}\label{fig:13}
+\end{figure*}
+
+\begin{figure*}[ht!]
+\centering
+\includegraphics[width=1.0\textwidth]{images/F14.jpg}
+\caption{The distribution of the shortest path length of different methods}\label{fig:14}
+\end{figure*}
+	
+		
+\begin{figure*}[ht!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/F15.jpg}
+	\caption{Privacy searched frequency and privacy budget-distribution of $\epsilon$}\label{fig:15}
+\end{figure*}
+
+\begin{figure*}[ht!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/F16.jpg}
+	\caption{Distribution of the privacy appear frequency and related parameter \el{ $k$} }\label{fig:16}
+\end{figure*}
+
+\begin{figure*}[ht!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/F17.jpg}
+	\caption{Distribution of privacy appear frequency to sampling step}\label{fig:17}
+\end{figure*}
+
+\subsection{ \el{ Evaluating} proposed privacy-preserving method with different distribution of sensitive area}
+
+\el{ Considering} the problem that the features of the tracked objects are extracted in threat model 1, this paper adds sampling noise to sensitive classes to prevent feature extraction attacks. For the defense test of this type of attack, it is necessary to sample the data of the tracking target area and compare different noise addition methods to test whether the data feature distribution under privacy protection is the same and similar to the data distribution feature before processing. The KL divergence method measures the distribution similarity of samples. As shown in Figure~\ref{fig:18}. The test set used (a) MOT16, (b) MOT17~\cite{milan2016mot16} and (c) Cityscapes~\cite{cordts2016cityscapes}, (d) KITTI~\cite{geiger2013vision}, four data sets related to motion tracking. This test is generated \el{ via} extracting a sensitive subset (pedestrian category) from the original data set. The X-axis represents the accuracy of the test set being resolved into the original image under a specific KL divergence, and the Y-axis represents the KL divergence value relative to the original data set. In Figure~\ref{fig:18}, the method in this article is \el{ proposed} NCP+Gaussian Noise, and the other three comparative privacy protection methods are Auto Encoder Deepfake Image, Sift+Gaussian Noise method and the method of directly adding white noise.
+
+It is observed from the results that the Deepfake method produces the highest degree of similarity, followed by the similar SIFT+Gaussian Noise method, and then  \el{our} proposed NCP+Gaussian Noise proposed in this paper. The method with the lowest similarity and the best protection is the white noise method. Because of Deepfake. The method is to construct a data set based on the original sampled feature set,  \el{and thus the sampled data is similar in terms of similarity. The Sift+Gaussian Noise method and the relevant method protect the target's privacy via sampling and adding Gaussian noise, which is based on controlling global parameters, and thus the tracking accuracy rate is low. On the other hand, the white noise method changes the distribution of the data set to a certain extent. Although the privacy feature set extracted by the attacker cannot be restored, this method of directly destroying the data set will also significantly affect the result of the target detection, Our proposal has the best balance between privacy protection and target tracking accuracy.}
+
+In the second set of experiments, we \el{ have} demonstrated the effectiveness of disinfection data on the degree distribution, measured by KL-divergence. Figure~\ref{fig:18} shows the KL-divergence of all datasets with different privacy noise under our proposed solution. Due to the large KL-divergence from Laplace distribution, better visibility is excluded from the Figure. We can observe that our method is suitable for preservation degree distribution. NCP's KL deviation is very small in all settings. Without array boundary processing algorithms, CRF cannot accurately reconstruct the leaf region, thus resulting in a less accurate degree distribution.
+	
+%为了测试本文提出方法的隐私安全性，我们通过两组两两相似的数据集来构成背景知识攻击，这个实验用到的数据集MOT16和MOT17~\cite{milan2016mot16}来做例子，其中两组数据集具有很高的相似度，在MOT17其中一组中随机提取部分数据构成攻击数据集$D_a$,然后对目标数据集MOT16用三种不同方法进行的目标检测的结果构成的数据集$D_{origin}$,这两者的KL散度来做比较，两种对比数据分布的KL散度越大，则表明隐私攻击者越无法从结果中推测出隐私信息，从而表明隐私强度越高。我们使用的两种对比方法为PPDTSA~\cite{ma2021ppdtsa}还有只用白噪声方式和检测结果进行混淆。图~\ref{fig:12}展示了四种情况下KL-divergence的情况，其中我们设定隐私预算都为$\epsilon = 1.0$。在图~\ref{fig:12}(a)(b)中，可以看到MOT16和MOT17两两相似的数据集中，在不同的隐私成本下，白噪声产生的KL散度都为最小，而且相比PPDTSA方法，其KL散度差异较大，而不同的隐私成本则意味着使用隐私预算的比率，如使用全部的隐私预算，则隐私成本为1.0，使用60%的隐私预算则隐私成本为0.6.其隐私成本和隐私预算呈正比。
+
+%在图~\ref{fig:12}(c)(d)中，也使用了两组两两相似的数据集CITYSCAPE~\cite{cordts2016cityscapes}, and KITTI~\cite{geiger2013vision}.这组实验也给出了一致的结果，即白噪声造成的KL散度最小，也就是隐私攻击者通过KITTI构造的攻击背景知识数据集在三种方法在CITYSCAPE数据集的目标追踪的推理结果上进行对比，白噪声处理的数据和攻击数据集非常相似，隐私信息很容易从攻击数据集中检测出来，过来是PPDTSA方法，最难被检测出来的就是本文提出的目标追踪网络结合NCP方法处理的数据。同时，虽然使用 NCP 方法的数据，其 KL 散度在相同的隐私预算但隐私成本不同情况下，并无显著的影响，并且本文提出的方法仍然可以保留原来数据集（例如，MOT16数据集）上的相似的分布程度。
+
+In order to test the privacy security of the method proposed in this paper, we use two sets of similar data sets to form background knowledge attacks. The data sets MOT16 and MOT17~\cite{milan2016mot16} used in this experiment are used as examples, in which two sets of data \el{have a high degree of similarity. A part of the data are randomly extracted from one of the MOT17 groups to form the attack data set $D_a$, and then the target data set MOT16 applied three different methods for target detection. In the data set $D_{ origin}$, the KL divergence of the two is compared. The larger the KL divergence of the two comparative data distributions, the less the privacy attacker can infer the privacy information from the results, thus indicating that the privacy strength is higher. The two comparison methods we use are PPDTSA~\cite{ma2021ppdtsa} and only use white noise to confuse the detection results. Figure ~\ref{fig:12} shows the four cases of KL-divergence, where we set the privacy budget to be $\epsilon = 1.0$. In Figure~\ref{fig:12}(a)(b), we have found that, using the similar datasets of MOT16 and MOT17, under different privacy costs, the KL divergence generated by white noise is the smallest, and compared with the PPDTSA method, its KL divergence is quite different,} and different privacy costs mean the ratio of using the privacy budget. If the entire privacy budget is used, the privacy cost is 1.0, and if 60\% of the privacy budget is used, the privacy cost is 0.6. Its privacy cost and privacy budget are proportional.
+
+In Figure~\ref{fig:12}(c)(d), two pairs of similar datasets CITYSCAPE~\cite{cordts2016cityscapes} and KITTI~\cite{geiger2013vision} are also used. This set of experiments also shows consistent results that the KL divergence caused by white noise is the smallest, that is, the attack background knowledge data set constructed by the privacy attacker through KITTI is compared with the inference results of the target tracking of the CITYSCAPE data set by the three methods. The data processed by noise are very similar to the attack dataset, and the privacy information is easy to detect from the attack dataset. The PPDTSA method is the most difficult for detection. The target tracking network proposed in this paper combines the data processed by the NCP method. At the same time, although the data of the NCP method is used, its KL divergence has no significant impact under the same privacy budget but different privacy costs, and the method proposed in this paper can still retain the original dataset (for example, MOT16 dataset) similar distribution.
+	
+In Figure~\ref{fig:13}, we show the KL divergence of four data sets at different sampling steps at a fixed time,$ \epsilon = 0.25 $. We can observe again that sampling has little effect on the degree distribution. In addition, a trend similar to that of the count query can be observed. Given a privacy budget that is not too small, if the underlying data set is sparse, it is often beneficial to employ sampling techniques.
+
+
+\begin{figure*}[ht!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/a10.jpg}
+	\caption{Root-mean-square deviation of tracking bounding box}\label{fig:a9}
+\end{figure*}
+
+
+
+\subsection{\el{ Evaluating} the privacy-preserving performance of normalized control penalty (NCP) method}
+Object tracking is one of the main tasks of pattern recognition. The above experiments will prove that the NCP under tracking also effectively maintains the target tracking accuracy. Similar to the experimental setup of paper~\cite{cheng2010k}, we randomly select 500 pairwise similar feature data for testing and compare the tracked objects between the sanitized dataset (which has been processed with privacy protection) and the original dataset.
+	
+
+Figure~\ref{fig:14}, Figure~\ref{fig:15}, Figure~\ref{fig:16} and Figure~\ref{fig:17} show the detection of tracked objects by different methods. The  $k=1,k=5,k=10,k=15,k=20,k=25$ are the numbers of classes added to the test separately. Here, we take the frequency that privacy classes retrieved by privacy attackers as a measure of privacy leakage. The higher the retrieval frequency, the worse the degree of privacy protection. The higher the level of protection. To compare the actual situation, we \el{ have made two extreme cases in the test, one is|can still be detected at 0, the data has some privacy classes that are the same as the normal data, and the training data themselves have many repetitions but different labels. When the budget is 0, and the frequency is not 0, it means that the same data marked in this dataset have different labels, and the different labels have privacy classes and non-privacy classes. At the same time, before the experiment, we had extracted the required target detection category and corresponding image via} retrieving the data category. This process is called cleaning data. 
+
+It can be seen that the model processed \el{using the NCP method can handle all distributions on the cleaned dataset. Similar to the previous observation, although the frequency of privacy retrieval has a certain degree of randomness, that is, sometimes the privacy invested and the frequency of retrieval is not positively correlated, the four different sets of data all reflect the privacy of the input. The bigger the budgets, the less frequently they are retrieved. }
+
+Through experiments in Figure~\ref{fig:14}, the privacy budget is $\epsilon=0.25$, we \el{ have observed} that in the CITYSCAPE dataset of Figure~\ref{fig:14}, the frequency of retrieval of privacy objects decreases with the increase of the privacy budget. When the privacy budget reaches level 8, the experimental results of different numbers of classes are close to each other. Since the retrieval value is 0, the experiment constituted by this trend \el{ based on} the dataset KITTI also has the same situation. When the budget level is 8, the retrieval frequency also tends to be 0. It can be seen that \el{ ,} when $k=15$, when the privacy budget is 0, it is also retrieved, indicating that the features in the sensitive class and the non-sensitive class are duplicated. 
+
+In the MOT16 and MOT17 datasets, this error does not appear again. When the privacy budget is 0, when there is no sensitive class, the retrieval frequency is also 0. At the same time, it can be seen that \el{ ,} when the privacy budget is 5, the retrieval frequency has approached 0, and, when the privacy budget is 6 to 8, the retrieval frequency remains 0. This \el{indicates} that the privacy protection effect brought by the privacy budget is different under different data sets. Adding a smaller privacy budget to the MOT dataset can improve privacy protection.
+
+To exclude the influence of randomness of retrieval privacy attack, we also study the performance of the privacy protection method in this paper under different privacy budgets under the conditions of $\epsilon=0.5$, $\epsilon=0.75$ and $\epsilon=1.0$ \el{ the} degree of frequency retrieved by privacy attacks. Figure ~\ref{fig:15} \el{ shows the retrieval situation of the privacy attack 
+ with $\epsilon=0.5$, from which it can be seen that, the larger the privacy budget, the more similar the distribution. Figure ~\ref{fig:16} gives the privacy protection situation in the case of $\epsilon=0.75$, from which} we can observe that a larger correlation leads to a worse privacy protection utility.  Finally, Figure ~\ref{fig:17} shows the effectiveness of privacy protection under $\epsilon=1.0$. 
+
+According to the above experiments, we can conclude that in different data privacy protection tasks, the NCP method can process data under different privacy budgets, although the frequency of privacy retrieval has a certain randomness. That is, privacy and retrieval are sometimes invested. The frequencies are not positively correlated, but the different data all reflect the privacy of the input. \el{ The larger the budget,} the lower the frequency of retrieval, that is, the smaller the possibility of privacy leakage. The privacy budget brings different privacy protection effects under different datasets. For example, adding a relatively small privacy budget to the MOT dataset can bring better privacy protection effects. At the same time, it can also be observed that the privacy protection scheme proposed in this paper \el{ has negligible impacts on } the results on the same dataset under different $\epsilon$ parameter settings, indicating that the performance of the proposed scheme is relatively stable.
+
+\subsection{rMSE for tracking bbox}
+Since the displacement is disturbed after the protection noise is added, to demonstrate the ability of this paper to repair the disturbance, this method is used here to demonstrate its tracking ability and Root-mean-square deviation, especially in the error situation of the target tracking process, the method proposed in this paper  \el{ is compared with} NTPD~\cite{zhao2020novel}, PPDTSA~\cite{ma2021ppdtsa}, and the average white noise method. 
+
+Figure ~\ref{fig:a9} shows the Root-mean-square deviation of these 4 methods on MOT16, MOT17~\cite{milan2016mot16}, CITYSCAPE~\cite{cordts2016cityscapes}, and KITTI~\cite{geiger2013vision} datasets. As can be seen from the graph, in terms of the bias of object tracking, since the datasets of MOT16 and MOT17 are very similar, the results in panels (a) and (b) are very similar.  \el{In the two figures, the deviation rate of the NCP combined with the Gaussian noise method proposed in this paper can always remain the lowest among the three methods. In the target tracking task, the recognition accuracy is the highest. Compared with the NTPD and PPDTSA methods, the deviation rate is lower than that of the white noise method, but it is still higher than that of the NCP combined with the Gaussian noise method proposed in this paper. The worst deviation is the white noise method because the white noise method is an indiscriminate addition of noise. Although privacy is protected to a certain extent, it also causes a significant drop in the accuracy of many feature recognition. With the increase of the privacy budget, various methods reflect the upward trend of the deviation rate to a certain extent, which also shows that privacy protection and tracking deviation rate are a trade-off relationship. This trend is also reflected under different data sets. In Figures (c) and (d), the method in this paper always maintains the lowest RMSE deviation rate, although the comparative NTPD and PPDTSA methods also maintain a lower rate. The deviation rate level is higher than that of the method in this paper, and white noise is always in the worst state.}
+
+
+\section{Conclusion}
+We presented TSDCRF for privacy-preserving multi-object tracking, combining privacy-budgeted feature perturbation, NCP-based stability control, and time-series CRF refinement to reduce ID switches and trajectory deviation under privacy constraints and hijacking attacks.
+
+\textbf{Limitations and future work.} When the detector's classifier is severely compromised (e.g., adversarial category confusion), association may still drift. Future work will explore stronger adversarially robust classification and tighter privacy accounting aligned with tracking-specific objectives.
+
+
+
+
+% if have a single appendix:
+%\appendix[ProAttacksthe Zonklar Equations]
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to stadefense appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+%
+
+% Can use something like this to put references on a page
+% by themselves when using endfloat and the captionsoff option.
+%\ifCLASSOPTIONcaptionsoff
+%  \newpage
+%\fi
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,ref}
+
+
+% that's all folks
+\end{document}
+
