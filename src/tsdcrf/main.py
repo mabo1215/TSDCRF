@@ -26,6 +26,7 @@ from .privacy import GaussianDPConfig, add_gaussian_noise_bbox
 from .ncp import NCPConfig, compute_ncp_weight
 from .temporal_smoother import TemporalConfig, TrackSmoother
 from .viz import draw_tracks
+from .metrics import compute_mse_psnr, compute_rmse, aggregate_metrics
 
 
 COCO_CLASSNAMES = {
@@ -53,6 +54,7 @@ def parse_args():
     ap.add_argument("--video", type=str, default="", help="video path; empty => webcam(0)")
     ap.add_argument("--save", type=str, default="", help="optional output video path")
     ap.add_argument("--show", action="store_true", help="imshow window")
+    ap.add_argument("--eval", action="store_true", help="compute and log MSE/PSNR/RMSE (paper metrics)")
     return ap.parse_args()
 
 
@@ -149,7 +151,10 @@ def main():
 
     if show_gui:
         logger.info("Press Q or ESC to exit.")
+    if args.eval:
+        logger.info("Eval mode: computing MSE/PSNR/RMSE (sensitive bbox, original vs noisy).")
     logger.info("Start processing...")
+    mse_list, psnr_list, rmse_list = [], [], []
     while True:
         ok, frame = cap.read()
         if not ok:
@@ -174,6 +179,13 @@ def main():
             sigmas = base_sigma * ncp_w
             sigmas = np.where(is_sensitive, sigmas, 0.0).astype(np.float32)
             bboxes_noisy = add_gaussian_noise_bbox(bboxes, sigmas, (w, h))
+            if args.eval and np.any(is_sensitive):
+                max_val = float(max(w, h))
+                mse, psnr = compute_mse_psnr(bboxes, bboxes_noisy, is_sensitive, max_val=max_val)
+                rmse = compute_rmse(bboxes, bboxes_noisy, is_sensitive)
+                mse_list.append(mse)
+                psnr_list.append(psnr)
+                rmse_list.append(rmse)
 
         # 5) Multi-object tracking on noisy detections (associate targets in time series).
         tracks = tracker.update(bboxes_noisy, scores, cls_ids)
@@ -218,6 +230,12 @@ def main():
         writer.release()
     if show_gui:
         cv2.destroyAllWindows()
+    if args.eval and (mse_list or psnr_list or rmse_list):
+        avg_mse, avg_psnr, avg_rmse = aggregate_metrics(mse_list, psnr_list, rmse_list)
+        logger.info(
+            f"Eval (sensitive bbox, original vs noisy): avg MSE = {avg_mse:.6f}, "
+            f"avg PSNR = {avg_psnr:.2f} dB, avg RMSE = {avg_rmse:.6f}"
+        )
     logger.info("Done.")
 
 
