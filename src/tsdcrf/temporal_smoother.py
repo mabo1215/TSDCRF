@@ -1,3 +1,14 @@
+"""
+Temporal smoothing (DCRF-style) for privacy-preserving object tracking.
+
+Reference: TSDCRF, IEEE TETCI. After adding DP noise to the bounding box, the tracking
+position is deviated. The paper proposes "iterative estimation" (Eq. 16-19) to reduce
+position deviation and defend against orbit hijacking: use a global time-series view
+to correct wrong deviation of the target window and trajectory caused by attack or noise.
+DCRF (Dynamic CRF) maintains trajectory consistency across frames. This module implements
+a per-track Kalman filter on (center, size) plus optional blending with the noisy
+observation, corresponding to the state update and covariance update in the paper.
+"""
 from __future__ import annotations
 from dataclasses import dataclass
 from filterpy.kalman import KalmanFilter
@@ -6,15 +17,26 @@ import numpy as np
 
 @dataclass
 class TemporalConfig:
+    """
+    Temporal smoothing parameters (DCRF / iterative estimation in the paper).
+
+    - enable: if False, returns the noisy bbox unchanged.
+    - method: "kalman_smooth" (paper Eq. 16-19 style) or "none".
+    - alpha: blend factor; smoothed = alpha * kalman_state + (1-alpha) * noisy_bbox.
+      Higher alpha = trust the smoothed trajectory more (stronger temporal consistency).
+    """
     enable: bool = True
     method: str = "kalman_smooth"
-    alpha: float = 0.7  # smoothing strength
+    alpha: float = 0.7
 
 
 class TrackSmoother:
     """
-    Maintain per-track Kalman filters to smooth bbox center+size.
-    State: [cx, cy, w, h, vx, vy, vw, vh]
+    Per-track Kalman smoother for bbox (cx, cy, w, h) with velocity state.
+
+    Reduces position deviation after DP noise (paper: iterative estimation Eq. 16-19)
+    and maintains trajectory consistency to mitigate perturbation and orbit hijacking.
+    State: [cx, cy, w, h, vx, vy, vw, vh]; measurement: [cx, cy, w, h].
     """
     def __init__(self, cfg: TemporalConfig):
         self.cfg = cfg
@@ -66,6 +88,6 @@ class TrackSmoother:
         cx, cy, w, h = kf.x[0], kf.x[1], max(kf.x[2], 1.0), max(kf.x[3], 1.0)
         smoothed = np.array([cx - w / 2.0, cy - h / 2.0, cx + w / 2.0, cy + h / 2.0], dtype=np.float32)
 
-        # alpha blend with noisy box (optional)
+        # Blend smoothed state with noisy observation (paper: fuse valid measurements to reduce deviation).
         out = self.cfg.alpha * smoothed + (1.0 - self.cfg.alpha) * noisy_xyxy.astype(np.float32)
         return out

@@ -27,11 +27,11 @@ privacy:
 
 ncp:
   enable: true
-  mode: "class_weight"   # "class_weight" | "score_gate"
-  # class_weight: stronger penalty/perturbation for sensitive classes; preserve non-sensitive
+  mode: "class_weight"   # "class_weight" | "score_gate" | "combined"
+  # class_weight: stronger penalty (more noise) for sensitive classes; preserve non-sensitive
   sensitive_weight: 1.0
   nonsensitive_weight: 0.2
-  # score_gate: lower-confidence targets get more penalty (filter or more noise)
+  # score_gate: lower-confidence targets get more penalty; combined = class_weight * score_gate scale
   score_gate_thre: 0.35
 
 temporal:

@@ -1,3 +1,16 @@
+"""
+Main pipeline for TSDCRF: Time Series Dynamic Conditional Random Field for
+Privacy-preserving Object Tracking (IEEE TETCI).
+
+Pipeline per paper (Fig. 3):
+  1) Detect objects (YOLO11).
+  2) Mark sensitive classes (e.g. person) for privacy protection.
+  3) NCP: compute per-detection penalty weights (filter/weight classifications before noise).
+  4) Add (epsilon, delta)-DP Gaussian noise to sensitive bboxes; sigma scaled by NCP.
+  5) Multi-object tracking on noisy detections (associate targets across frames).
+  6) Temporal smoothing (DCRF-style): iterative estimation to reduce position deviation
+     and maintain trajectory consistency after noise; output smoothed bboxes.
+"""
 from __future__ import annotations
 import argparse
 import os
@@ -126,26 +139,25 @@ def main():
         # 1) Detect (YOLO11)
         bboxes, scores, cls_ids = det.infer(frame)
 
-        # 2) decide sensitive
+        # 2) Sensitive class mask (paper: privacy categories to protect).
         cls_names = [COCO_CLASSNAMES.get(int(c), str(int(c))) for c in cls_ids.tolist()] if cls_ids.size else []
         is_sensitive = np.array([name in sensitive_names for name in cls_names], dtype=bool) if cls_ids.size else np.zeros((0,), bool)
 
-        # 3) NCP weights
+        # 3) NCP: penalty weights before adding noise (paper: filter classifications, control accuracy vs privacy).
         ncp_w = compute_ncp_weight(scores, is_sensitive, ncp_cfg)
 
-        # 4) DP noise on sensitive bboxes (scaled by NCP)
+        # 4) (epsilon, delta)-DP Gaussian noise on sensitive bboxes; sigma = base_sigma * NCP weight.
         bboxes_noisy = bboxes
         if privacy_enable and bboxes.size > 0:
             base_sigma = dp_cfg.sigma()
             sigmas = base_sigma * ncp_w
-            # only apply to sensitive; non-sensitive sigma ~ 0
             sigmas = np.where(is_sensitive, sigmas, 0.0).astype(np.float32)
             bboxes_noisy = add_gaussian_noise_bbox(bboxes, sigmas, (w, h))
 
-        # 5) tracking
+        # 5) Multi-object tracking on noisy detections (associate targets in time series).
         tracks = tracker.update(bboxes_noisy, scores, cls_ids)
 
-        # 6) temporal smoothing per track bbox (approx DCRF temporal consistency)
+        # 6) DCRF-style temporal smoothing: reduce position deviation, maintain trajectory consistency (paper Eq. 16-19).
         out_tracks = []
         for t in tracks:
             cls_name = COCO_CLASSNAMES.get(int(t["cls_id"]), str(int(t["cls_id"])))
