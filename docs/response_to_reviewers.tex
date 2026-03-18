@@ -1,0 +1,42 @@
+%=============================================================================
+% Authors' Response to the Review of Manuscript [PAPER-ID]
+% IEEE Transactions on Computational Social Systems (TCSS)
+% Revised manuscript – first page(s) as requested by the Editor
+% Replace [PAPER-ID] with your actual manuscript ID before submission.
+%=============================================================================
+\thispagestyle{plain}
+\noindent\textbf{\large Authors' Response to the Review of Manuscript [PAPER-ID]}\\[0.5em]
+\noindent\textit{IEEE Transactions on Computational Social Systems}\\
+
+\vspace{0.5em}
+\noindent We thank the Associate Editor and the Reviewer for their constructive feedback. We have prepared a major revision that addresses all comments. Below we summarize our responses and the corresponding changes in the manuscript.\\
+
+\noindent\textbf{Associate Editor Comments}\\
+
+\noindent\textbf{1. The contribution of the paper needs to be well-elaborated in the introduction.}\\
+\textit{Response:} We have expanded the introduction to state the contributions more clearly and in context. A dedicated paragraph now motivates the problem (privacy vs.\ tracking conflict), and the contributions subsection (Section~I) has been elaborated with precise technical statements and how each contribution addresses the gap. We also added a short ``Paper organization'' paragraph so the contribution narrative is tied to the rest of the paper.\\
+
+\noindent\textbf{2. The same for the motivations.}\\
+\textit{Response:} We have added an explicit motivations paragraph in the introduction that explains: (i) why object tracking leaks sensitive identity information; (ii) why adding privacy-preserving noise disrupts association and causes ID switches; (iii) why a plug-in refinement that balances privacy and tracking is needed; and (iv) how our three components (DP noise, NCP, and time-series CRF) address these motivations.\\
+
+\noindent\textbf{3. Discussions of related work need to be detailed.}\\
+\textit{Response:} We have significantly expanded Section~II (Related Work). We now provide a more detailed discussion of: privacy-preserving tracking and detection (with comparison to Zhou et al., Zhao et al., and topology-aware DP); object detection methods (YOLO, SSD) and their role in our pipeline; privacy-preserving object detection; object tracking with self-attention (SE, ECA, BAM, CBAM, TrackFormer) and the challenge of combining DP with transformers; and the tracking-object-lost problem and how our CRF-based association differs from prior dynamic template methods. Each thread is tied to how our approach differs or extends prior work.\\
+
+\noindent\textbf{4. More results need to be added.}\\
+\textit{Response:} We have added a new subsection in Section~VI on statistical comparison based on noise: we report Peak Signal-to-Noise Ratio (PSNR) between the original and the privacy-processed bounding-box (or feature) representations, and discuss the relationship between PSNR, noise scale, and privacy budget $\varepsilon$. This addresses the Reviewer's suggestion to add statistical comparison experiments (e.g., PSNR) to explain the relationship between noise and privacy budget at the statistical level. We also strengthened the discussion of existing results (KL-divergence, RMSE, retrieval frequency) and their implications.\\
+
+\vspace{0.5em}
+\noindent\textbf{Reviewer 1}\\
+
+\noindent\textbf{Comment:} ``Since privacy protection involves adding noise, the author can add some statistical comparison experiments based on noise, such as PSNR (Peak Signal-to-Noise Ratio). This method helps to explain the statistical characteristics between noise and original data at the statistical level, thereby revealing the relationship between noise and privacy budget.''\\
+\textit{Response:} We thank the Reviewer for this suggestion. We have added a new subsection (Section~VI) that reports PSNR between the original sensitive-region (or bounding-box) data and the privacy-processed data under different privacy budgets $\varepsilon$. We define PSNR in our setting (perturbed vs.\ original coordinates/features), report results across MOT16/17, Cityscapes, and KITTI, and discuss how PSNR decreases as $\varepsilon$ decreases (stronger privacy, larger noise), thus revealing the statistical relationship between noise magnitude and privacy budget. This complements our existing KL-divergence and RMSE analyses.\\
+
+\vspace{0.5em}
+\noindent We believe the revised manuscript addresses all editorial and reviewer comments. We have made every effort to improve the clarity of contributions and motivations, the depth of related work, and the breadth of experimental results.\\
+
+\vspace{0.5em}
+\noindent Sincerely,\\
+\noindent The Authors
+
+\clearpage
+%=============================================================================

@@ -1,0 +1,46 @@
+Reviewer: 1
+
+Comments to the Author
+This paper uses a differential privacy algorithm and normalized control penalty method for the privacy leakage problem in object tracking tasks, which enables protection of the specific privacy object classes. And the proposed methods may improve the accuracy of target tracking while protecting the privacy of the tracked targets.
+However, there are some problems which must be solved.
+1 The hierarchical structure is poor, jumping from place to place. The authors are supposed to make whole paper more logical.
+2 Related work about privacy-preserving in object tracking is not sufficient, which needs more extensive works to synthesize current research.
+3 The title of Section IV, is “DYNAMIC CONDITIONAL RANDOM FIELD AND LOSS FUNCTION MEASUREMENT”, but there is no relevant description about “DYNAMIC CONDITIONAL RANDOM FIELD”. And this section should provide more detailed information about the methods used in the experiment, but the author takes a lot of part to explain irrelevant details, making it redundant and hard to understand what is the core.
+4 There is a lack of detailed explanation of the methods used in the study. For example, the authors mentioned that CRF can “mitigate the perturbation and track the lost object”, but they didn’t explain why CRF can address their questions. And the explanation about NCF mentioned on page 8 is not clear.
+5 There are a lot of unclear explanation and inconsistency problems in the equation, making it difficult to understand. The explanation of equation 3(page 5) mentioned ∑_(i,k)▒〖μ_α s_α (l_i-1,l_i,t,i)〗, but in equation 3 is ∑_(i,α)▒〖μ_α s_α (l_i-1,l_i,t,i)〗, and Z(t),L is not used in equation 3; in equation 7, it may be RTree∙R_p (pv^') instead of T∙R_p (pv^'); The explanation of equation 8(page 5) “R_p (pv) is the detection frequency for purified vector pv^' ” may be purified vector pv; On page 7 ,“For a given metric M , if M (T ) > M (T ′), it can be considered that T has higher information loss than b or T has lower accuracy. In other words, the data quality of T is worse than that of T ? ”, the sentence has an obvious misrepresentation. Some equations like 16,17,18 didn’t give an detailed explanation.
+6 Most sentences contain grammatical mistakes or are not complete sentences. The quality of English needs improvement.  Page 10, “Comparing the target tracking architecture … the architecture proposed in this paper”;  Page 11,”  The higher the retrieval frequency, the worse the degree of privacy protection. The higher the level of protection.”
+7 The illustration of figures is ambiguous. In Fig. 1, the three images on the top side are three sequence images instead of on the left side, and its movement trajectory are in three bottom images;  Which one is the experimental results attacked under trajectory hijacking in Fig. 5?On page 8 and 9 there is a contrary statement;  Fig. 9 showed “The distribution of the shortest path length of different methods”, but there is no representation of the shortest length, and the same goes for Figure 10 ,11 and 12.  And there should be a demonstration of  Fig. 4.
+
+
+Reviewer: 2
+
+Comments to the Author
+The manuscript is difficult to follow; it should be reviewed according to the comments below, in my opinion.  
+- The structure of the manuscript should be revised. The contribution of the authors, the method proposed and related work can be reorganized  such that the reader can easily understand and follow the paper.
+- A detailed flowchart of the proposed algorithm should be given.
+- The whole manuscript should be reviewed grammatically; some examples are given below:
+“Comparing the target tracking architecture based on the target tracking task without using the privacy protection method and the architecture proposed in this paper [33]”
+“As shown in Figure 6. The test set used…”
+“… is the white noise method. Because of Deepfake. The method …”
+“then the target data set MOT16 applied three different methods for target detection.”
+“The two comparison methods we use are PPDTSA [36] and only use white noise to confuse the detection results.”
+“Thus the image recognition system(object tracking recognized as one type of this system) can generate diffent..”
+What is Bob?
+The acronyms should be provided at their first mention for example CRF.
+
+
+Reviewer: 3
+
+Comments to the Author
+This paper proposes a privacy-preserving object tracking framework that relies on time series analysis and uses dynamic CRF and differential privacy algorithms to deal with orbit hijacking attacks, and to enhance performance a normalized control penalty (NCP) method is employed to filter detected classifications. The proposed method is evaluated on existing publicly available tracking benchmarks.
+While the paper attempts to solve an important and interesting problem, there are some points that need to be clarified.
+- In the Introduction section, the authors nicely define and motivate the problem at hand. It would however be helpful to more clearly highlight the technical novelty of the proposed method wrt to existing related methods that addressed the same problem.
+- As the effectiveness of proposed method is demonstrated with the DeepSort tracker, I was wondering if the proposed approach is specific only to DeepSort or if its generic to be applied to other tracking algorithms as well?
+- The proposed method essentially enables a means to re-estimate target trajectories in a privacy-protecting manner. But there exists methods [A, B, C, D] that perform analysis of target structure/gait over time to infer about identity of objects. Could the analysis of trajectories (target gaits over time) therefore still not possibly lead to a loss of privacy for the problem under consideration in this paper?
+[A] Munsell et al., “Person identification using full-body motion and anthropometric biometrics from kinect videos,” in Proc. of ECCV Workshops, (Firenze), 2012
+[B] Andersson and Araujo, “Person identification using anthropometric and gait data from kinect sensor,” in Proc. of AAAI, 2015
+[C] Wu et al., “A comprehensive study on cross-view gait based human identification with deep cnns,” IEEE Trans. PAMI, 2017
+[D] Kusakunniran et al., “A new view-invariant feature for cross-view gait recognition,” IEEE Trans. IFS, 2013
+- The paper needs to be proof-read for some typos/errors, please.
+
+Missing Key References Question (Optional) (List important references missing from the paper):

@@ -1,0 +1,1194 @@
+
+\documentclass[journal,transmag]{IEEEtran}
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[journal]{../sty/IEEEtran}
+
+
+
+\usepackage{qtree} % just for figure example
+\usepackage{listings} % for using listings...
+\usepackage{xcolor}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{amsmath}%equation mutilrow align
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage[caption=false]{subfig}
+\usepackage{array}
+\usepackage{algorithm}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{comment}
+\usepackage{makecell}
+\newcommand*{\defeq}{\stackrel{\text{def}}{=}}
+\usepackage[justification=centering]{caption}
+
+
+%\usepackage[noend]{algpseudocode}
+
+\usepackage{algpseudocode}
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{assumption}{Assumption}
+
+\setcounter{page}{1}
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor} 
+
+
+
+
+\begin{document}
+%
+% paper title
+% can use linebreaks \\ within to get better formatting as desired
+% Do not put math or special symbols in the title.
+\title{Appendix: Time Series Differential Privacy-preserving Object Tracking for Conditional Random Field }
+
+% author names and affiliations
+% transmag papers use the long conference author name format.
+
+
+
+\begin{comment}
+\author{\IEEEauthorblockN{Bo Ma\IEEEauthorrefmark{1}
+%,
+%Jinsong Wu\IEEEauthorrefmark{3}}
+}
+\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Mathematics and Computer Engineering,
+Auckland University of Technology,Auckalnd  1024 NZ}
+
+ % stops an unwanted space
+\thanks{Manuscript received July 1, 2020; revised July 27, 2020.
+Corresponding author:Bo Ma@aut.ac.nz}}
+\end{comment}
+
+
+% The paper headers
+\markboth{IEEE Transaction on Pattern Analysis and Machine Intelligence ,~Vol.~11, No.~4, March~2021}%
+{Shell \MakeLowercase{\textit{et al.}}: Bo Ma of IEEEtran.cls for Journals}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+%
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2012 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+% for Transactions on Magnetics papers, we must declare the abstract and
+% index terms PRIOR to the title within the \IEEEtitleabstractindextext
+% IEEEtran command as these need to go into the title area created by
+% \maketitle.
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+\IEEEtitleabstractindextext{%
+\begin{abstract}
+Privacy brings side-effect for centralised machine learning in some applications: if the training data involves sensitive personal information, most of centralised machine learning methods prefer using none privacy protection training framework, as most of current privacy-preserving methods will slow down the model training or even become incapable. As a whole, privacy-preserving has become more and more sophisticated for machine learning in recent years, as many privacy problems occur in practical applications. However, it also raises new challenges in privacy-preserving in this collaborative machine learning architecture. In order to know if data protection is effective and efficient enough to training data, we implement the Normalized Control Penalty method(NCP) insert into condition Random Field(RCF) to filter the classification result before the privacy-preserving process. In one hand, the aim of my research is to find the certain techniques (mainly include noise generalization, information loss analysis and federated learning) to measure the overhead of noise generalization and the data leakage after training, which can provide the privacy protection sharing purpose under the collaborative learning architecture. On the other hand, the aim of new measurement is betterment the private protection methods from theoretical aspect for the existing machine learning framework. The experiment shows that proposed measurement can help to improve the accuracy and other aspects.
+
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+Noise Generalization,Conditional Random Field(CRF), Gaussian Kernel,Noise Sub-sampling,Differential Privacy,Normalized Control Penalty(NCP),Kullback-Leibler divergence, Renyi Entropy
+\end{IEEEkeywords}}
+
+
+
+% make the title area
+\maketitle
+
+
+% To allow for easy dual compilation without having to reenter the
+% abstract/keywords data, the \IEEEtitleabstractindextext text will
+% not be used in maketitle, but will appear (i.e., to be "transported")
+% here as \IEEEdisplaynontitleabstractindextext when the compsoc
+% or transmag modes are not selected <OR> if conference mode is selected
+% - because all conference papers position the abstract like regular
+% papers do.
+\IEEEdisplaynontitleabstractindextext
+% \IEEEdisplaynontitleabstractindextext has no effect when using
+% compsoc or transmag under a non-conference mode.
+
+
+
+
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+%\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps.
+%
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+%
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+%
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+%
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+
+In object detection and tracking tasks. In non-interactive settings for publishing videos or images, these mechanisms are either computationally infeasible high-dimensional data or are practically ineffective due to their large practical costs~\cite{mironov2017renyi}. At best, these methods are used to release some privacy retention statistical features about the image data set. However, those methods only analysed and extract a small part of features with the statistical distribution. If the image data size is small, the result will make the privacy protection fail via background location matching. To protect the privacy of a completed video in object tracking tasks by adding random noise is not efficient because most random noise is easy to distinguish due to the noise followed by a different statistical distribution.
+
+In the object tracking tasks, when the loss function has been optimized and entropy has been increased in tracking framework, it can help to prevent leakage for sensitive training data. The loss function is a method of evaluating how effective the specific machine learning algorithm models the given data. If the predictions deviate beyond actual results, loss or cost values would reach a very large number. However, through randomization, if implement the differential privacy, there are certain limitations into the existing mechanisms (such as the Laplace mechanism or the exponential mechanism) in practice~\cite{koufogiannis2015optimality}. 
+
+
+\subsection{Motivation: The limitation of Differential Privacy mechanism and Gaussian measures in object tracking tasks}
+In the target tracking task, some tracking objects may be marked as sensitive by the user, and it is desirable to use some methods to protect the sensitive categories and not affect other non-sensitive tracking objects. The previous researchers tried to use Gaussian sampling method to protect sensitive data. However, this method still has some limitations, including whether the same distribution noise generated after sampling as the original image will have an impact on accuracy in some training models.
+
+Some researchers have explored the Gaussian distribution mechanism to remove the limitations of privacy-preserving~\cite{liu2018generalized} on improved analysis the statistical distribution with data and propel this mechanism into the necessary process, so the system can generate differential privacy protection algorithms. However, this process is still flawed, in Dwork’s work~\cite{dwork2009complexity}, she mentions that if removing or replacing individuals in a data set, it has a negligible effect on the output distribution, and the calculations on private data will not reveal sensitive information about the individuals in the data-sets. She has introduced the theorem of the perturbation output of $(\varepsilon,\delta)$-differential privacy in~\cite{dwork2009complexity}. Namely, for any $(\varepsilon,\delta)\in (0,1),$ the Gaussian output perturbation mechanism $\sigma \leq \frac{\Delta p_2 log\frac{1.25}{\delta}}{\varepsilon}$  is $(\varepsilon,\delta)$-differential privacy, namely: 
+\begin{itemize}
+    \item A natural question about this result is whether this value of $\delta$ provides the minimum amount of noise required to obtain $(\varepsilon,\delta)$-differential privacy with Gaussian perturbations?
+	\item Another question is what happens when $\varepsilon \geq 1"$ for objects in sensitive classes?  
+\end{itemize}
+
+We will unfold this topic and discusses both issues: (1) we prove that the $\delta$ value given in this Theorem is sub-optimal in the high privacy system i.e.,  $\varepsilon \rightarrow 0$ . and (2) We then prove that the problem is inherent in the usual proof strategies used to analyse Gaussian mechanisms. (3) At the end, we ware showing that, the large values for $\varepsilon$. The standard deviation of the Gaussian perturbation that provides $(\varepsilon,\delta)$-differential privacy must be scaled like $\Omega(\frac{1}{\sqrt{\varepsilon}})$. This means that the scaling $\Theta(\frac{1}{\sqrt{\varepsilon}})$ provided by the classical Gaussian mechanism in the range of $\varepsilon \in (0,1)$ cannot exceed any bounded interval. Based on this concept, we classify the input data according to its entropy and then generate the noise according to its probability distribution feature.  The noise can be injected into data for next step of learning through federated stochastic gradient descent. 
+
+In the Gaussian privacy mechanisms, there are certain limitations, especially if $\varepsilon \rightarrow 0$, using Gaussian perturbation to achieve $(0,\delta)$-differential privacy could  obviously exceed the capabilities of the classic Gaussian mechanism, because in the theorem of differential privacy, the standard deviation $\sigma=\Theta(\frac{1}{\sqrt{\varepsilon}})$ increases with $\varepsilon \rightarrow 0$ to infinity, and there will be $\sigma=\frac{\Delta}{2\delta}$  in $(0,\delta)$-differential privacy. In the work~\cite{balle2018improving}, the researchers analyse the condition with $\varepsilon \rightarrow 0$ , shows most of researchers  trying to establish $(\varepsilon,\delta)$-differential having this limitation.
+
+However, if we implement differential privacy into the exist deep learning methods, we need to improve current Gaussian distribution mechanism beyond the above limitations. Dwork had mentioned~\cite{dwork2006our}, this is also the fundamental of privacy preserving deep learning method. 
+
+\section{Related Work}
+When analysis the noise with $(\varepsilon,\delta)$-differential privacy, here Hall in his paper\cite{hall2013differential} mentioned When using Gaussian process generate covariance kernel in  reproducing kernel Hilbert space (RKHS), then the correct noise level can be measured by RKHS norm function, and the “sensitivity” level of the function will impact on machine learning result if learning approaches need to analysis the "sensitivity" level of added noise. In addition, it can use kernel space under Abstract Wiener space\cite{osswald2003malliavin}. This paper will focus on stochastic analysis with Abstract Wiener under the stream if it is follow with Gaussian Distribution. For Abstract Wiener spaces, the Banach space $C_{\mathbb{R}}$ is replaced by any separable Banach space $B$ and a certain densely embedded Hilbert Space $\mathbb{H}$. The measure $\rho_1$ on $\mathbb{B}$ is in general the centered Gaussian distribution and variance is 1. The Malliavin derivative $D$ is defined by density of operator $L^2(\mathbb{B},\rho_1)$. And its value is $L^2(\mathbb{B},\rho_1,\mathbb{H})$  and its Bochner square map 
+on Hilbert space as $f : \mathbb{B}-\mathbb{H}:$.
+
+\subsection{Analysis of differential privacy (DP) with reproducing kernel Hilbert space (RKHS)}
+\nobreak
+Constructing a Hilbert space $H$ with $\{\lambda_i \Psi_i\}_{i=1}^\infty $is for a set of orthogonal bases. Any function (vector) in this space can be represented as a linear combination of this set of bases. 
+
+\begin{equation}
+    f=\Sigma_{i=1}^\infty f_i \sqrt{\lambda_i} \varphi_i
+\end{equation}
+
+\noindent where $f$ can be expressed as an infinite-dimensional function in $H$, and $f=(f_1,f_2,\cdots)_H^T$.
+
+Let $K(x,\cdot)=\Sigma_{i=1}^\infty \lambda_i \psi_i (x) \varphi_i $, of which $K(x,y)$ represents a binary function or an infinite-dimensional matrix. $K(x,\cdot)$ can represent a unary function or an infinite-dimensional vector of the $x$-th row of the matrix. That is, a parameter of the fixed kernel function is $x$, then remove each item from the corresponding base, the vector corresponding to the space $H$ is
+\begin{equation}
+    K(x,\cdot)=(\sqrt{\lambda_1} \psi_1 (x), \sqrt{\lambda_2} \psi_2 (x),\cdots)_H^T
+\label{eq:hsp1}
+\end{equation} 
+
+Thus, we have
+\begin{equation}
+    K(y,\cdot)=(\sqrt{\lambda_1} \psi_1 (y), \sqrt{\lambda_2 } \psi_2 (y),\cdots)_H^T
+\end{equation}
+
+Hence, we deduce
+
+\begin{equation}
+\begin{array}{ll}
+    <K(x,\cdot),K(y,\cdot)>_{\mathcal{H}} \\
+    =\{\Sigma_{i=1}^\infty \lambda_i \psi_i (x)\psi_i (y)\}_{\mathcal{H}} \\
+    =\Sigma_{i=1}^\infty \lambda_i \psi_i (x)\psi_i (y) (\varphi_i)^2 \\
+    = K(x,y) \\
+\end{array}
+\label{eq:HSpace}
+\end{equation}
+
+The kernel product is used to reproduce the inner product of two functions. From Equation~\ref{eq:hsp1} to Equation~\ref{eq:HSpace}, $H$ is also called Reproducing Kernel Hilbert Space (RKHS). Equation~\eqref{eq:HSpace} shows the relationship between the origin data $K(y,\cdot)$ and noisy data $K(x,\cdot)$. It also reveals that the origin data is reproduced in RKHS and generate the noise datasets. %Then, the noise data generated from this formula could add into the federated stochastic gradient descent introduced in next section.
+Hereinafter, we define a mapping 
+\begin{equation}
+        <\Phi(x),\Phi(y)>_{\mathcal{H}}=<K(x,\cdot),K(y,\cdot)>_{\mathcal{H}} = K(x,y).
+\end{equation}
+
+Therefore, we do not need to know what this mapping is and where the feature space is. As long as it is a symmetric positive definite function $K(\cdot)$, there must be a mapping $\Phi$ and a feature space $\mathcal{H}$ , we have
+
+\begin{equation}
+<\Phi(x),\Phi(y)>_{\mathcal{H}} = K(x,y)
+\end{equation}
+
+If space $\mathcal{H}$ has established in order to achieve differential privacy, the noise can be added to protect the privacy before training. When detecting the space of $\mathcal{H}$, the confidential level can be detected by the noise indications as well. However we also need to consider the scenario under the abstract Wiener space which could enhance the privacy for the exits support vector machine (SVM) algorithm. In our work, we only focus on this condition that we can use space H and mimic input data to produce noise for next step of using Federated stochastic gradient descent (SGD). 
+
+\subsection{Abstract Wiener space and Entropy Analysis}
+\nobreak
+In Mathematician Dudley's work~\cite{dudley1971seminorms}, he shows that the abstract Wiener space construction is the only essential way to obtain a strictly positive Gaussian measure on a separable Banach space. This is important if we can add Gaussian noise to the summary and show how the noise can be calibrated to achieve differential privacy in Reproducing Kernel Hilbert Space or Abstract Wiener space. Those two different spaces are the key to measure the entropy of an input data needed for learning. In addition, those two spaces are also the key to understand the impact on privacy protection when different levels of noise are being injected in.
+
+Let’s denote $\chi\in \mathbb{G}$ as Gaussian, and $f(\chi)$ is Gaussian in Euclidean space $\mathbb{R}$. In addition, let D represents the differential privacy (DP) and $\mathbb{B}$ represents Banach space. $\Theta: D\rightarrow \mathbb{B}$ denotes the selective of Gauss noise with achieved DP, and we define $\theta_D := \theta(\mathcal{D})$. Here is one case where the aim is to release a finite number of linear functionals of $\theta_D$. We have thought about offering some sanitized features for the whole function, or some nonlinear modification. Throughout we use * to denote the corresponding topological dual space. Equipped with the norm $\| f \|_{B*}=sup_{\|h\|_{B*} \leq 1} f(h)$, the dual space is also a separable Banach space. The pair $(\mathbb{B},w)$ is called an abstract Weiner space, where $w$ is the probability measuring over $\mathbb{B}$ induced by $\chi$. Every Gaussian process is uniquely parametrized by a mean, $\theta \in \mathbb{B}$, and a covariance operator $\Theta:\mathbb{B}*\rightarrow \mathbb{B}$, which for every $f\in \mathbb{B} $ satisfies
+\begin{equation}
+\begin{array}{ll}
+    E[f(\chi)] = f(\theta), \\
+    Cov(f(\chi),f(\theta)) = \\
+    E[(f(\chi)-E(f(\chi)))(f(\theta)-E(f(\theta)))]
+\end{array}
+\end{equation}
+
+This shows the methods of achieving differential privacy under abstract Wiener space. This Wiener space can help to scale the noise level for a set of data in prediction queue. In addition, Linear prediction of background changes from recent observations can be performed by the Wiener filter to deal with privacy information in not only image processes but also data-sets prediction.
+
+\subsection{Conditional random filed}
+Chris Stauffer provide Gaussians mixtured model with nonstationary background processes. Moreover, a hidden Markov model (HMM) is used to impose the temporal continuity constraint on noise detection for privacy-preserving surveillance. In 2001, Lafferty and A McCallum,etc. define the Conditional Random Field (CRF) in their paper.  For two random fields p and $p_0$, when conditioned on $p_0$, the random field p follow with Markov features:$M(p(a)|p',p(b),a \ne b)= M(p(a)|p',p(b),b\in F_a)$ , where set $F_a$ is the neighboring point of a.
+
+Given the observed data up to time t, the posterior probability distribution of the segmentation field st is modeled by a conditional random field to formulate spatial dependencies. The segmentation labels obey the Markov property when the observed data is given: $M(p_t(a)|i_{1-t},p_t(b),a \ne b)= M(p_t(a)|i_{1-t},p_t(b),b\in F_a)$, in the formula,  $i_{1-t} = {i_1,i_2,\dots i_t}$ is the observed data from time 1 to t. Hence, a CRF is a random field globally conditioned on the observed data. Using the Hammersley-Clifford theorem and considering only up to pairwise clique potentials, the posterior probability of the segmentation field is given by a Gibbs distribution that has the following form:
+
+Given the observation data up to time t, the posterior probability distribution of the segmentation field st is modeled by the conditional random field, and the spatial dependence of the conditional random field can be demonstrated by modeling. When labeling the given observation data, the segmented labels follow the Markov rule: $M(p_t(a)|i_{1-t},p_t(b),a \ne b)= M(p_t(a)|i_{1-t},p_t(b),b\in F_a)$. 
+
+In the above formula, $i_{1-t} = {i_1,i_2,\dots i_t}$ is the observation data from time 1 to t. Therefore, CRF is a random number with the observation data as the global condition. Using the Hammersley-Clifford theorem and the paired group potential, the posterior probability of the segmentation field can be obtained. The specific form of Gibbs distribution is as follows:
+
+\begin{equation} \label{eq:crf1}
+\begin{aligned}
+    M(p_t(a)|i_{1-t}) \propto \exp \{ - \sum_{a\in A}[R_x ( p_t (a)|i_{1-t}) \\
+    +\sum_{b \in F_a} R_{a,b}(p_t(a),p_t(b)) \}
+    \end{aligned}
+\end{equation}
+
+The single-domain potential $R_a (s_T (X)|I_{1-t})$ reflects the observation information of a single site from 1 to t, while the dual-domain potential $R_{a,b}(p_t(a),p_t(b))$ is to form a continuous observation area by applying spatial constraints to it. To simplify the calculation, it is assumed here that the pairwise constraints are independent of the observed prediction data. Spatial connectivity constraints can be imposed by the following dual domain potential formula:
+
+\begin{equation}\label{eq:crf2}
+    R_{a,b}(p_t(a),p_t(b)) \propto S_{a,b}(p_t(x),p_t(y)) 
+\end{equation}
+and 
+\begin{equation} \label{eq:crf3}
+    R_{a,b}(p_t(a),p_t(b)) = \frac{1}{\parallel a-b \parallel^2} (1-\sigma(p_t(a)-p_t(b)))
+\end{equation}
+where in Equation~\ref{eq:crf3}, $\parallel a-b \parallel^2$ denotes the Euclidian distance and $\sigma(p_t(a)-p_t(b))$ is the Kronecker delta function\cite{koo2013isogeometric}. Thus, two neighboring hoods are more likely to belong to the same class than to different classes. The spatial constraint becomes strong with decreasing distance between the near datasets.
+
+In order to express the dynamic or time dependence of the continuous segmentation field, the state transition probability of the segmentation field is also approximated by the following distribution defined on the single-domain and dual-domain data sets.
+
+\begin{equation} \label{eq:crf4}
+\begin{aligned}
+    M(p_{t+1}|p_t) \propto \exp \{ - \sum_{a\in A}[R_a ( p_{t+1} (a)|p_t(G_a)) \\
+    +\sum_{b \in F_a} R_{a,b}(p_{t+1}(a),p_{t+1}(b)) \}
+    \end{aligned}
+\end{equation}
+
+In Equation~\ref{eq:crf4}, where $ G_a $ specifies $t_{th}$ in the data set, adjacent sites that have an impact on all adjacent domains x in $(t+1)_{th}$, and  $p_t(G_a)$ means that $p_t(b)|t \in G$ holds for a group of G. And $R_a (p_{t+1} (a)|p_t(G_a)$ can model the label state transition of a single position. For a pair of data sets $R_{a,b}(p_{t+1}(a),p_{t+1}(b))$. This formula gives its spatial constraints, it should be noted that $ F_a $ is the unequal set in the neighborhood $ G_a $, and $ F_a $ and $ G_a $ The size of may be different. $ X \notin F_a $, and $ a \in G_a $. To distinguish them, $ F_a $ is called the spatial neighborhood, and $ G_a $ is the temporal neighborhood. The formula is expressed as:
+
+
+\begin{equation} \label{eq:crf5}
+R_a (p_{t+1} (a)|p_t(G_a)) = \frac{1}{|F_a|} \sum_{b \in F_a} R_a (p_{t+1}(a),p_t(b)) 
+\end{equation}
+
+\begin{equation} \label{eq:crf6}
+R_a (p_{t+1} (a)| p_t(G_a)) \propto S_a (p_{t+1}(a)|p_t(b))
+\end{equation}
+
+\begin{equation} \label{eq:crf7}
+S_a (p_{t+1}(a)|p_t(b)) = \frac{1}{\parallel a-b \parallel^2 + \rho^2} (1-\sigma(p_{t+1}(a) - p_t (b)))
+\end{equation}
+
+Where $|F_a|$  represents the size of the set, and $R_a (p_{t+1} (a)|p_t(G_a))$ in the potential prediction formula is used to label its temporal neighborhood through time continuity constraints Make a match. The parameter $ \rho $ is the time-dependent intensity of the data set. Generally, if the data input changes slowly, the value of $ \rho $ is small, and vice versa.
+
+Assuming that the spatially different observations are independent and identically distributed, the observation model $q(l_t|p_t)$ is:
+
+\begin{equation} \label{eq:crf8}
+q(l_t|p_t) = \prod_{a\in A} q(l_t(a)|p_t(a))
+\end{equation}
+Where $l_t(a)$  is the observation value of data node a, which consists of locally measured information (such as its data input intensity or gradient characteristics).
+
+From Equation~\ref{eq:crf1}-\ref{eq:crf8}, spatial and temporal dependencies in the segmentation process are unified by a dynamic probabilistic model based on the conditional random field. Therefore, it is called the conditional random field (CRF) model\cite{wang2005dynamic}.
+
+\section{Gaussian mechanism with noise sub-sampling}
+
+When understanding the inside of those spaces, we can use this principle to generate the noise. Here we use the randomized mechanism defined as $M:\mathbb{G} \rightarrow \mathbb{R}$  with Gaussian $\mathbb{G}$ and range $\mathbb{R}$ satisfies $(\varepsilon,\delta)$-differential privacy. We assume the adjacent inputs as $i\in \mathbb{G} $, the random noise as ,$n'\in \mathbb{G} $ for any subset of outputs $D \subseteq \mathbb{R}$ and it has $Pr[M(d)\in \mathbb{R}] \leq Pr [M(d')\in P$]. The output perturbation of $\varepsilon$-differential privacy can be obtained according to: $\delta \leq \frac{\Delta p_2 log\frac{1.25}{\delta}}{\varepsilon}$. This inequality has been introduced in the previous section. We can generate the noise model to cope with the subset  $D_t \leq K(x,y)$ which is sampled. The noise model $n_t$ could  update themselves as $\Delta n^k=n^k-n_t $ of which the $n^k$ is the noise in RKHS and $n_t$ is current time of the time series $t$ of $n$. Then, we expand the Gaussian mechanism as 
+
+\begin{equation}\label{eq:noise}
+\begin{array}{cc}
+n_{t+1}= n_t + \\
+\frac{1}{m}(\Sigma_{k=0}^{m_t} \frac{\Delta n^k}{max(<\Phi(x),\Phi(y)>,\frac{\|\Delta n^k \|_2}{P})}+\mathcal{N}(0,\varepsilon^2 P^2)).
+\end{array}
+\end{equation}
+
+Equation~\eqref{eq:noise} shows for each input dataset we can update the latest noise as $n_{t+1}$,  $ \Sigma_{k=0}^{m_t} \frac{\Delta n^k}{max(1,\frac{\|\Delta n^k \|_2}{P})} +\mathcal{N}(0,\varepsilon^2 P^2) $ is sum of the updated noise, inside of the formula, $\Sigma_{k=0}^{m_t} \frac{\Delta n^k}{max(<\Phi(x),\Phi(y)>,\frac{\|\Delta n^k \|_2}{P}) }$ is the sum of updated noises at O, and $<\Phi(x),\Phi(y)>=K(x,y)$ from upper section, and  $N(0,\varepsilon^2 P^2)$is the noise scaled to $P$. 
+
+\subsection{privacy level assessment with Conditional Random Field}
+
+When calculating the entropy from a set of input data, our method could train the inside of machine learning framework. The work in~\cite{qu2011falcons} indicates the security scores can be evaluated based on a large data set collected from the Renyi Entropy. This approach includes not only the conceptual-level and instance-level Renyi Differential Function(RDF) data (ontologies) but also application data(such as syslogs, user operations records from Mobile phone e.g.). Therefore, this concept has practical background to characterize the use of the concepts in practice.
+
+\begin{definition}[leakage rate] \label{def:leakage} 
+For a concept $c$, let $Leakage(c)$ be the set of privacy level where $c$ is instantiated. A concept $c$ is in two datasets a and b if either $c$ is a class or $a,b$ contains an execution triple set, the predicate datasets (a,b) and the privacy level is $c$,  $c$ is a property and $a,b$ contains an execution triple whose predicate is $c$. The privacy leakage score of $c$ is calculated as
+
+\begin{equation}\label{eq:ranking}
+\begin{array}{ll}
+    Leakage(c)=\\
+    p(a,b|\lambda) =\\
+    \prod^T_{t=1} p(a_t,b_t|\lambda)= \\
+     \prod^T_{t=1} p(b_t|b_{t+1},\lambda)\dot p(a_t|b_t,\lambda) 
+
+\end{array}
+\end{equation}
+\end{definition}
+
+
+The ranking function~\eqref{eq:ranking} is used to compute set of input data entropy. Above privacy leakage score is a privacy leakage event and the user’s security ranking having other factors impacted with. This is a measurement to find out the privacy leakage parts from the input data, then the data can input into the training stage.
+
+\begin{theorem} [the prediction of leakage rate] \label{thm:leakagerate} 
+
+When add noise into a unknown data pair(a,b) according to $(\varepsilon,\delta)$-differential privacy, and those data pair is continually input into sequence, here is : 
+\begin{equation}\label{eq:crfinpl}
+\begin{array}{cc}
+      p(b_t|b_{1:t-1},a_{1:t-1}) = p(b_t|b_{t-1})  &  \\
+ p(a_t|b_{1:t-1},b_{1:t-1}) = p(a_t|b_{t-1})    
+\end{array}
+\end{equation}
+\end{theorem}
+
+
+\begin{proof}
+
+
+
+
+In that can use Markov Random Field(MRF) to factor the Equation~\ref{eq:crfinpl} , the detail is
+\begin{equation}\label{eq:mrf1}
+\begin{array}{ll}
+      p(a)=  \frac{1}{C} \sum^K_{k=1} \eta_i (a_{c_{i}})    \\
+      = \frac{1}{C} \sum^K_{k=1} \exp [-E_k (a_x)] \\
+      = \frac{1}{C} \exp \sum^K_{k=1} F_k (x_{c_{k}})
+\end{array}
+\end{equation}
+
+Consequently, $p(a|b)$ can also use MRF analysis to calculate the probability for predict data-sets. In equation~\ref{eq:mrf1}, the $p(a)$ is probability of predict dataset (a) and its conditional filed is follow with Gaussian distribution as $\exp \sum^K_{k=1} \eta_i (a_{c_{i}})$
+
+\begin{equation}\label{eq:crfinpl2}
+\begin{array}{ll}
+      p(a|b)=  & \\
+    \frac{1}{C} exp \sum^T_{t=1}  \lbrack  \sum^K_{k=1} \lambda_k f_k (b_{t-1},b_t,a_{1:t})+ &\\ \sum^L_{l=1} \eta_k g_k (b_t,a_{1:t}) \rbrack    \\
+    p(B=b|A=a) = \frac{1}{C(a,\lambda,\eta)} 
+\end{array}
+\end{equation}
+
+\begin{equation}\label{eq:crfinpl2a}
+\begin{array}{ll}
+    p(B=b|A=a) = \\
+    \frac{1}{C(a,\lambda,\eta)}  exp \sum^T_{t=1} \lbrack \lambda^T \cdot f(b_{t-1},b_t,a) + \eta^T \cdot  g(b_t,a)  \rbrack \\
+    = \frac{1}{C(a,\lambda,\eta)} exp (\lambda^T \cdot \sum^T_{t-1} f(b_{t-1},b_t,a) + \eta^T \sum^T_{t=1} g(b_t,a) )
+\end{array}
+\end{equation}
+
+In Equation~\ref{eq:crfinpl2}, where $ p(a|b) $ specifies the 
+
+
+
+\begin{equation}\label{eq:crfinpl2b}
+\begin{array}{ll}
+      p(a|b)=  \frac{1}{c} \sum^T_{t=1} \Psi  (b_1,b_2,a) 
+\end{array}
+\end{equation}
+
+\begin{equation}\label{eq:crfinpl2c}
+\begin{array}{ll}
+      p(b|a)= \\
+      \frac{1}{c} \exp \sum^K_{i=1} F_i (A_{t}) \\ 
+      = \frac{1}{c} \exp \sum^T_{t=1} F(b_{t-1},b_t,a_{1:T}) \\
+      = \frac{1}{c} \exp (\Delta b_{t-1},a_{1:T} + \Delta b_t,a_{1:T} + \Delta b_{t-1},b_t, a_{1:T}  ) \\
+      = \frac{1}{c} \exp \lbrack \sum^L_{l=1} \eta_l g_l (b_{t-1},a_{1:T}) \\
+      + \sum^M_{m=1} \rho h(b_t,a_{1:T}) + \sum^T \lambda_k f_k (b_{t-1},b_t,a_{1:T} ) \rbrack
+\end{array}
+\end{equation}
+
+In Equation~\ref{eq:crfinpl2a} $\Delta b_{t-1},a_{1:T}$ and $\Delta b_t,a_{1:T}$ is condition function and  $\Delta b_{t-1},b_t, a_{1:T}$ is transfer function. 
+
+\end{proof}
+
+\begin{lemma}[Rsult of transfer function]\label{lem:transf}
+
+In transfer function $\Delta b_{t-1},a_{1:T}$,  the result can be deduct from  gradient  ascent  algorithm.
+\end{lemma}
+
+Proof of Lemma~\ref{lem:transf} as follow:
+\begin{proof}
+
+\begin{equation}\label{eq:crfinpl3}
+\begin{array}{ll}
+      p(A_t=i|B)= \\
+      \sum_{b_1,b_2 \dots b_{t-1}b_{t+1}\dots b_T} P(b|a) = \\
+      \sum_{b<1,t-1>} \sum_{b<t+1,T>} \frac{1}{C} \prod^T_{t'=1}  \Psi  (b_{t'-1},b_{t'},a)       
+\end{array}
+\end{equation}
+
+\begin{equation}\label{eq:crfinpl4}
+\begin{array}{ll}
+      p(A_t=i|B)= \\
+      \sum_{b_1,b_2 \dots b_{t-1}b_{t+1}\dots b_T} P(b|a) = \\
+      \sum_{b<1,t-1>} \sum_{b<t+1,T>} \frac{1}{C} \prod^T_{t'=1}  \Psi  (b_{t'-1},b_{t'},a)    \\
+      = \frac{1}{C} \Delta X \Delta Y   and   b_t \in S
+\end{array}
+\end{equation}
+
+\begin{equation}\label{eq:crfinpl5}
+\begin{array}{ll}
+      \Delta X = \\
+      \sum_{y<1:t-1>} \Psi_1 (b_0,b_1,a) \Psi_2(b_1,b_2,a) \dots \\
+       \Psi_{i-1} (b_{t-2,b_{t-1},a}) \Psi_t (b_{t-1},b_t=i,x) 
+     \end{array}
+\end{equation}
+
+\begin{equation}\label{eq:crfinpl6}
+\begin{array}{ll}
+      \Delta Y = \\
+      \sum_{y<t+1:T>} \Psi_{t+1} (b_t=i,b_{t+1},a)  \dots \\
+      \Psi_T(b_{T+1},b_T,a) 
+     \end{array}
+\end{equation}
+
+in that $\Delta X $ has:
+
+\begin{equation}\label{eq:crfinpl7}
+        Q_t(i) : b_0 b_1 b_2 \dots b_{t-1} b_t = i
+\end{equation}
+
+\begin{equation}\label{eq:crfinpl8}
+       Q_{t+1}(j) : b_0 b_1 b_2 \dots b_{t-2} b_{t-1} = i
+\end{equation}
+
+\begin{equation}\label{eq:crfinpl9}
+       Q_t(i) = \sum_{j\in S} \Psi_t (b_{t-1} = j , b_t = i, a ) \alpha_{t-1} (j)
+\end{equation}
+
+Can use gradient descent approach to pursue the minimize point.
+
+\begin{equation}\label{eq:crfinpl10}
+\begin{array}{ll}
+    \hat{\lambda} \hat{\eta} =\\
+    \arg \max_{\lambda,\eta}  \sum^I_{i=1} p(b^{(i)} | a^{(i)}) & \\ 
+    = \arg \max_{\lambda,\eta} \log \prod^N_{n=1} p(b^(i)|a^(i)) & \\
+    = \arg \max_{\lambda,\eta} \sum^N_{n=1} \log p(y^{(i)}|x^(i)) & \\
+    = \arg \max_{\lambda,\eta} \sum^N_{n=1} \{ - \log C(A^{i},\lambda,\eta) & \\
+    + \sum^T_{i=1} \lbrack \lambda^T \cdot f(b^{(i)}_{t-1}, b^{(i)}_t,a^{(i)})+  \eta^T \cdot g(y^{(i)}_t,a^{(i)}) ) \rbrack \} \\
+    = \arg \max_{\lambda,\eta} L(\lambda,\eta,a^{(i)})
+\end{array}
+\end{equation}
+
+\begin{equation}\label{eq:crfinpl11}
+\begin{array}{ll}
+    \nabla_{\lambda} L = \sum^N_{n=1}\lbrack \sum^T_{t=1} f(b_{t-1},b_{t},a^{(i)})- \nabla_{\lambda} \log C (a^{(i)},\lambda,\eta) \rbrack
+\end{array}
+\end{equation}
+
+Inside of equation~\ref{eq:crfinpl11},
+
+\begin{equation}\label{eq:crfinpl12}
+\begin{array}{ll}
+   \nabla_{\lambda} \log C (a^{(i)},\lambda,\eta) \\
+   = \exp\lbrack \sum^T_{t=1}  f(b_{t-1},b_{t},a^{(i)}) \rbrack \\
+   = \sum_{b} p(b|a^(i)) \cdot \sum^T_{t=1} f(b_{t-1},b_{t},a^(i))\\
+   = \sum^T_{t=1} \lbrack \sum_{b} p(b|x^{(i)})\cdot f(b_{t-1},b_t,a(i)) \rbrack \\
+   =\sum^T_{t=1} \sum_{b_{<1:t-2>}} \sum_{b_{t-1}} \sum_{b_t} \sum_{b_{<t+1,T>}} p(b|a^{(i)}) \cdot f(0) \\
+   =\sum^T_{t=1} \sum_{b_{t-1}} \sum_{b_t} \lbrack \sum_{b_{<1,t-2>}} \sum_{b_{<t+1,T>}} p(b|a^(i)) f(0)  \rbrack \\
+   = \sum^T_{t=1} \sum_{b_{t-1}} \sum_{b_t} p(b_{t-1},b_t,x^{(i)}) f(b_{t-1},b_{t},x^(i))
+\end{array}
+\end{equation}
+
+So $\nabla_{\lambda} L $ is 
+
+\begin{equation}\label{eq:crfinplf1}
+\begin{array}{ll}
+   \nabla_{\lambda} L = \\
+   \sum^N_{n=1} \sum^T_{t=1} \lbrack f(b_{t-1},b_t,a^{(i)}) - \\ \sum_{b_{t-1}} \sum_{b_t} p(b_{t-1},b_t \cdot f(b_{t-1},b_t,a^{(i)})) \rbrack
+\end{array}
+\end{equation}
+
+In Equation~\ref{eq:crfinplf1}, the gradient ascent algorithm can be used to find out result. The result is:
+
+\begin{equation}\label{eq:crfinplf1f}
+   \left\{\begin{array}{cc}
+   \lambda^{(t+1)} = \lambda^{(t)} + step  \nabla \lambda  L(\lambda^{(t)},\eta^{(t)}) \\
+   \eta^{(t+1)} =  \eta^{(t)} +  step  \nabla \eta L(\lambda^{(t)},\eta^{(t)}) 
+\end{array}\right.
+\end{equation}
+
+Inside of  Equation~\ref{eq:crfinplf1f} the result of $ \nabla_{\lambda} L$ and $ \nabla_{\eta} L$ can be deducted from Equation~\ref{eq:crfinplf1f}.
+
+Proof End.
+\end{proof}
+%$t_{th}$ in the data set, adjacent sites that have an impact on all adjacent domains x in $(t+1)_{th}$, and  $p_t(G_a)$ means that $p_t(b)|t \in G$ holds for a group of G. And $R_a (p_{t+1} (a)|p_t(G_a)$ can model the label state transition of a single position. For a pair of data sets $R_{a,b}(p_{t+1}(a),p_{t+1}(b))$. This formula gives its spatial constraints, it should be noted that $ F_a $ is the unequal set in the neighborhood $ G_a $, and $ F_a $ and $ G_a $ The size of may be different. $ X \notin F_a $, and $ a \in G_a $. To distinguish them, $ F_a $ is called the spatial neighborhood, and $ G_a $ is the temporal neighborhood. The formula is expressed as:
+
+
+
+
+\subsection{Privacy-preserving Stochastic Gradient Ascent(ppSGA)}
+
+In order to find the maximum point of result, we introduce gradient ascent algorithm in Equation~\ref{eq:crfinplf1}, this methods is it find the maximum point in Conditional Random Filed.  
+
+
+This section describes the main part of our approach to warding the $\varepsilon$-deferentially private data, and this data can be trained by the neural network with the Federated Stochastic Gradient Descent (Federated SGD) algorithm. The method can help tuning the parameters in a relatively good condition, here the good condition means the Federated SGD can still be divergent with fast speed comparing with the original stochastic gradient descent method.
+
+One might attempt to protect the privacy of training data by working only on the final parameters resulted from the training process, and treating the training process as a black box. Unfortunately, one may not have a useful, tight characterization of the dependence of these parameters on the training data. Adding overly conservative noise to the parameters, of which the noise is selected by analysing the worst case, would destroy the utility of the learned model. Therefore, we aim to a more sophisticated approach which could flexibly control the noise influence of the training data during the training process, specifically in the SGD computation. This approach has been inspired by the previous works\cite{shokri2015privacy}. We make several modifications and extensions in the privacy accounting as below:
+
+\subsection{The deferentially privacy federated stochastic gradient descent algorithm}
+
+As shown in Algorithm~\ref{alg:Differentialuser terminate}, the federated deep learning system works. Under the federated deep learning framework, the system selects $N$ participants with same learning objects and common network architecture such as local WLAN or TCP|IP protocol network, and their local machines storage their own private datasets. The server is maintaining the latest values of parameters which is opening for all parties, and the server can be instead by a simulated or virtual distribution system such as Cloud service, point of sales, etc. During the training stage, it uses the model with parameters which is minimizing the empirical deficit function $L(\Theta)$. The parameters from sever could control the whole process of collaborative learning, as parameters of neural network can be learned by training. The sever and other parties cannot observe any other sensitive dataset, because all individual datasets are stored in their own terminates. 
+
+\begin{algorithm}[ht]
+\caption{Differential privacy algorithm using federated stochastic gradient descent in user terminals}
+\label{alg:Differentialuser terminate}
+
+\hspace*{\algorithmicindent} 
+\textbf{Input}: Local data sources $D_1,D_2,\dots D_N$ and data size N, download parameters from the server, the parameters are: Loss function $L(\Theta)=\frac{1}{N} \Sigma_i \mathcal{L}(\theta,d_n)$, learning rate $\eta$, noise scale $\tau$ and gradient norm bound $G$. \\
+
+\hspace*{\algorithmicindent} 
+\textbf{Output}: Data $\Theta$, privacy cost $(\rho,\omega)$ \\
+
+\begin{algorithmic}[1]
+\Procedure {}{Download Stochastic sample $D_n$ and parameter group $P_{global} (\eta,\tau,G)$ from server and replace local parameters $P_{local} (\eta,\tau,S,G)$}
+\For {$n\in [\mathcal{N}]$}
+\State Download parameter group $P_{global}(\eta,\tau,G)$ from server
+\State Replace local parameters and generate $P_n (\eta,\tau,G)$
+\State Fetch Stochastic sample $D_n$ and probability is $\frac{D}{N}$
+\State Compute gradient $g_t$ with latest local parameters
+\ForEach {$i\in L_t$ compute $g_t (d_i)\leftarrow \vartheta_{\Theta_t} \mathcal{L}(\Theta_t,d_n)$}
+\State Clip Gradient 
+\State $\dot{g}_t (d_i)\leftarrow \frac{g_t (d_i)}{max(1,\frac{\|g_t (d_i)\|_2}{G})}$
+\State Add Laplace Noise
+\State $\dot{g}_t\leftarrow \frac{1}{N}( \Sigma_i g_t(d_i)+\mathcal{N}(0,\eta^2 G^2 I))$
+\State          Descent and output
+\State            $\Theta_{t+1}\leftarrow \Theta_t- \eta_t \dot{g}_t$
+\EndFor
+\EndFor
+\State Upload $\vartheta_{\Theta_t}$ to the parameter server, select gradient norm group $G$ via the follow standards:
+\State 1. Largest values: Sort gradients in $\dot{g}_t (d_i)$ and upload output $\Theta_{t+1}$
+\State 2. Stochastic: Choose gradient sample $D_{n+1}$ below bound $G$ 
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The algorithm in user terminals has three steps:
+\begin{itemize}
+
+ \item \textbf{Step 1}: The terminal downloads the parameters from the server and replaces the existing local parameters. 
+    
+\item \textbf{Step 2}: The SGD process starts, and at each epoch of the federated SGD, the local terminate calculates the gradient $\vartheta_{\Theta_t} \mathcal{L}(\Theta_t,d_n)$ for a random subset of examples. Then it normalizes the normal clip of each cycle and calculates the mean. After that, it adds noise to protect privacy of training sets, and also take a step against this mean noise gradient. Moreover, for the privacy, the output is based on the information kept inside of a privacy accountant and the privacy information didn’t published yet.
+    
+\item \textbf{Step 3}: The last step is to upload the data into server regarding to two criteria. The first criteria is to select the exact $\Theta_{t+1}$,  which is the biggest value of SGD algorithm. The other criteria is to select the samples $D_{n+1}$ which is smaller than the bound G. This second selection period might trigger down the convergence. However, those two criterion can be improved by using the kernel function with abstract Wiener space.
+\end{itemize}
+ 
+As a summary, the expected contributions are listed as below: 
+
+\begin{itemize}
+\item We propose a novel approach with improved distributed stochastic gradient descent (SGD) framework in federated learning architecture, and the server could control the process of SGD at same time. The server cannot read or fetch any data, and all data are saving and processed in local machine. 
+\item We add Laplace noise during gradient descent period. Ensure the added noise does not destroy the process and the output data hardly being detected by any attacker, so the privacy can be protected.
+\item We develop two standards for uploading local parameters. The parameters can be easily classified and processed by the server.
+\item We enable the server to control and coordinate the whole processes in the federated learning framework, so the server only knows the parameter to control process but hardly touch any data from user local terminate in or after training. 
+\end{itemize}
+
+The range of the gradients $\dot{g}_t (d_i)$ is $[-G,G]$, and we can add Laplace noise corresponding with differential privacy in this early stage, and next step could explore adding the noise via information entropy theory-based approach. 
+
+The differential privacy algorithm needs the server to control and coordinate the whole process. The differential privacy federated stochastic gradient descent algorithm in server works as below: 
+
+\begin{algorithm}[ht]
+\caption{Federated stochastic gradient descent algorithm in the server}
+\label{alg:FederatedServer}
+\hspace*{\algorithmicindent} 
+
+\textbf{Input}: The parameter $P_n (\eta,\tau, S,\mathbb{G})$ collected from each user terminals.which includes: Loss function $L(\Theta)$, parameter learning rate $\eta$, noise scale $\tau$, data size $S$ and gradient norm bound $\mathbb{G}$.
+
+%\hspace*{\algorithmicindent} 
+\textbf{Output}:  Latest global parameter $P_{global} (\eta,\tau,S,\mathbb{G})$) \\
+
+\begin{algorithmic}[1]
+\Procedure {}{Fetch each individual terminate parameter group $P_n (\eta,\tau,S,\mathbb{G})$ from the user terminate }
+
+\For {$n\in [\mathcal{N}]$}
+\State Set parameter group $\Acute{P}_{global}=P_{global}+P_n$
+\State Set $C_n := C_n +1 $
+\EndFor
+\State Send $\Acute{P}_{global} (\Acute{\eta},\Acute{\tau},\Acute{S},\Acute{\mathbb{G}})$ back to the user terminate.
+\State Sort $C_n$ and let $T_n$ be the set of index for counter $C_n$ with largest values.
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+The server initializes the parameter group $P_n (\eta,\tau,S,\mathbb{G})$ and send back to user when user terminate sends the request to fetch it. Server could add a task for each process from user terminate, and set $\Acute{P}_{global} (\Acute{\eta},\Acute{\tau},\Acute{S},\Acute{\mathbb{G}})$ to the corresponding global parameters $P_n (\eta,\tau,S,\mathbb{G})$  and update counter $C_n$ for each epoch n from user terminate. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Data quality and loss measurement} \label{informationlossmodel}
+Before discussing data quality and establishing a data loss measurement model, this paper will introduce a concept, that is, data accuracy. Data accuracy is closely related to data loss caused by data processing during privacy protection: the less data loss, the better the data quality. This metric largely depends on the specific category of privacy protection data mining algorithms. In the process of improving data accuracy, we need to analyze how accurate these privacy protection processing algorithms are based on different modification techniques. If the algorithm uses perturbation or blocking techniques to hide the original data and aggregated data, the information loss can be measured according to the dissimilarity between the original data set D and a data set D 'that has been cleaned (filtered dirty data).
+
+\subsection{Information loss rate}
+
+In the paper of~\cite{oliveira2002privacy}, Oliveira and Zaiane proposed three different methods to measure the dissimilarity between the original database and the purified database. The first method is based on the difference between the frequency histogram of the original database and the purified database. The second method is based on calculating the difference between the size of the cleaned database and the original database. The third method is based on the comparison between the contents of the two databases.
+
+
+\begin{eqnarray} \label{equ:lossrate}
+LossRate(A,A')= \frac{\sum_{i=1}^n |f_A (i)-f_A' (i)|}{ \sum_{i=1}^n f_A (i)}
+\end{eqnarray}
+
+In the formula~\ref{equ:lossrate}, i is the data item in the original datasets A, and $ f_A (i) $ is its frequency in the input datasets, and $ i'$ is given after the application of privacy protection technology. Given the data item, $ f_A '(i) $ is the frequency of its new appearance in the datasets A after privacy protection processing. We can see that the information loss is defined as the ratio between the sum of absolute errors made between the frequency of calculating the items from the decontamination database and the sum of all frequencies of the items in the original database. The formula~\ref{equ:lossrate} can also be used in privacy-preserving data mining algorithms, which use blocking techniques to insert uncertainties about some sensitive data items or their correlation into the data set. The frequency of data item $ i $ belongs to the anti-virus data set $ D '$. The minimum frequency of data item i calculated by considering all the blocking values associated with it equal to zero and the quasi-identifier QI become 1 by processing The average between the maximum frequencies obtained is given.
+
+In the case of exchange of information, the loss or loss of information caused by the heuristic algorithm can be evaluated by measured parameters, which are introduced in the exchange of values for obfuscation. If there is no correlation between different database records, you can estimate the data confusion by the percentage of value replacement performed to hide specific information.
+
+For the method based on multiplicative noise~\cite{liu2006random}, the quality of the disturbance data depends on the size of the random projection matrix. Generally, the error bound of the inner product matrix generated by this perturbation technique is on average 0, and the variance is defined by the reciprocal of the dimension of the reduced space. In other words, when the dimension of the random projection matrix is close to the dimension of the original data, the result of calculating the inner product matrix based on the transformation or projection data is also close to the actual value. Since the inner product is closely related to many distance-based metrics (for example, Euclidean distance, cosine angle of two vectors, correlation coefficient of two vectors, etc.), if these data mining tasks analyze the error limits directly on the mining results The impact uses certain distance-based metrics.
+
+If modifying the data includes aggregating some data values, the loss of information is given by the result of the loss in the data. Intuitively, in this case, in order to perform the hidden operation, the mining privacy protection data algorithm uses some type of "generalization or aggregation scheme", which can be ideally modeled as a tree scheme. Each cell modification applied during the clean-up phase using the general tree introduces data perturbations that reduce the general accuracy of the database. As in the case of the k anonymous algorithm proposed in~\cite{sweeney2002achieving}, we can use the formula~\ref{ILformula}. Given a database $ T $ with $ N_A $ fields and $ N $ transaction transactions, if we identify the domain generalized graded GT with depth h as a generalization scheme, we can measure the cleaned database $T^*$ The information loss (IL) is:
+
+
+\begin{eqnarray}\label{ILformula}
+InformationLoss(T^*)=\frac{\sum^{i=N_A}_{i=l} \sum^{i=N}_{j=l} \frac{h}{|GT_{A_i}|} }{|T|*|N_A|}
+\end{eqnarray}
+
+Where $\frac{h}{|GT_{A_i}|}$ represents the loss of each purified data item. For concealment techniques based on sampling methods, the quality is obviously related to the size of the sample under consideration, generally speaking, to its characteristics.
+
+
+\subsection{Information loss matrix}
+There are also other precise measurement methods specifically designed for k anonymization methods. One of the earliest data quality measures is based on the height of the generalization level~\cite{samarati2001protecting}. Height is the number of times the original data value has been promoted. This metric assumes that the generalization on the data indicates the loss of information on the original data value. Therefore, the data should be spread to the fewest steps as possible to maintain maximum utility. However, this metric does not take into account that not every induction step is equal in the sense of information loss.
+
+Later, Iyengar~\cite{iyengar2002transforming} proposed a general loss measure (LM). Suppose T is an adata table with n attributes. The LM metric is considered to be the average information loss of all data units of a given data set, which is defined as follows:
+
+\begin{eqnarray}\label{LMformula}
+LM(T^*)=\frac{\sum^{n}_{i=l} \sum^{|T|}_{j=l} \frac{f(T*[i][j])-1}{G(A_i)-1} }{|T|*|N|}
+\end{eqnarray}
+
+In the formula~\ref{LMformula}, $T^*$ is the anonymization result of table T. f is a function of the given data unit value $ T * [i] [j] $, the return value can be generalized to the number of different values of $ T * [i] [j] $, g is the given attribute $ A_i $ Returns the number of different values of $ A_i $.
+
+\subsection{Classification metric matrix}
+Then Iyengar put forward the concept of classification metric matrix CM (Classification Metric) to optimize the k-anonymous dataset for training classifiers. It is defined as the sum of individual penalties for each row in the table, normalized by the total number of rows N.
+\begin{eqnarray}\label{CMformula}
+CM(T^*)=\frac{\sum_{\forall rows} penalty(row_r) }{N}
+\end{eqnarray}
+The penalty value for $row_r$ is 1, ie $row_r$ is penalized if it is suppressed or its class label is not the majority class label of its group. Otherwise, the penalty value for row r is 0. This metric is particularly useful when we want to build a classifier on anonymous data.
+
+
+\subsection{Discernible metric matrix}
+Another interesting metric is the discernible metric matrix DM~\cite{bayardo2005data} proposed by Bayado and Agrawal. This discernibility metric assigns a penalty to each tuple based on how many tuples in the transformed data set are indistinguishable from them. Let t be a tuple from the original table T, and let $G_T^*(t)$ be the set of tuples in the anonymous table $ T ^ * $, which cannot be distinguished from t, or the tuple in $T^*$ The set of groups is equivalent to the anonymized value of t. Then DM is defined as follows:
+
+\begin{eqnarray}\label{DMformula}
+DM(T^*)=\sum_{t \in T} G_{T^*} (t)
+\end{eqnarray}
+
+In the above tuple, if the tuple t is suppressed, the size of $GT * (t)$ is the same as the size of T *. In many cases, suppression is considered to be the most expensive in the sense of information loss. Therefore, in order to maximize data utility, tuple suppression should be avoided as much as possible.
+
+For any given metric M, if $M(T)>M(T')$ we say that T has a higher information loss than b or less accurate. In other words, the data quality of T is worse than that of T? Does this apply to all indicators? What is a good metric? Answering these questions is not easy. As shown by~\cite{nergiz2007thoughts}, CM is better than LM in classification applications. In addition, LM is more suitable for association rule mining. Obviously, in order to judge how good a particular metric is, we need to associate our judgment with a specific application (such as classification, mining association rules).
+
+CM metrics and information gain privacy loss ratios are more interesting than~\cite{bertino2005information}~\cite{sweeney2002achieving} because it considers the possible applications of data. However, if we want to build a classifier on various attributes, what to do is unclear. In addition, if the data is intended to be used to construct a classifier, these two indicators will work properly. Is there a utility indicator for various applications? With this in mind, Kifer~\cite{kifer2006injecting} proposed a utility metric related to the Kullback-Leibler divergence. In theory, using this method can produce a better anonymous data set (for different applications). The researchers measured the utility of the resulting anonymous data set. Preliminary results show that this metric is very good in practical applications.
+
+For statistical-based perturbation techniques aimed at hiding the value of confidential attributes, information loss is basically a lack of accuracy in estimating the original distribution function of a given attribute. As described in the paper~\cite{sweeney2002achieving}, the information loss that occurs during the reconstruction of the density function f X (x) of the estimated attribute X is measured by calculating the following values:
+\begin{eqnarray}\label{IFLLformula}
+I(f_X,\widehat{f_X})=\frac{1}{2} E[\int_{\Omega_X} |f_X(x)  - \widehat{f_X}(x) | dx ]
+\end{eqnarray}
+
+That is, half of the expected value of the $ l_1 $ norm between $ f_X (x) $ and $\widehat{f_X}(x)$, which is the density distribution before and after the application of privacy protection technology, respectively.
+
+When considering the password-based technologies commonly used in distributed environments, we can observe that for privacy protection purposes, they do not use any kind of interference technology. Instead, they use encryption technology to ensure the data privacy of each site by restricting the information shared by all sites. Therefore, the quality of the data stored at each site is not affected at all.
+
+
+\subsection{Information loss of Bayesian model}
+On the other hand, information loss can also be evaluated by Bayesian probability models, assuming that a possible hidden data segment belongs to a specific user. Previously, Li and her research team members~\cite{xuinformation2014} mentioned a probabilistic model to predict the likelihood that hidden data belongs to a user. Hidden data is processed by some preservation algorithms. She mentioned that the probability may include the probability of selecting false data from the entire data set. In her idea, the probability of correctly selecting and deleting the ratio of noise data to the entire data set. Based on her ideas, this article will use the prior probability of selecting the real data set from the entire set as the condition in the information retrieval process. At this stage, the multi-normal model $p(w|d)$ related terms are estimated for each private data d in the set C. The data loss of the entire data set w will be indexed and searched. The probability of the loss model follows the above Bayesian formula.
+
+
+\begin{eqnarray}
+p(d|q)=p (q|d)p (d)
+\end{eqnarray}
+$ p $ is the probability of data, $ q $ is the search condition, and private data is $d$. The amount of $q$ in the retrieval process is very important.
+
+After the generalized process, the data can be classified into different sets. As published data, external readers can create models so that the data is lost to quantification after publishing. The source can evaluate the data or online social networks. In this case, the accuracy of the source data should be measured. In 1998, Lin and his member~\cite{lin1998information} proposed the generalization distance between phrases. He mentioned that word similarity can be measured as:
+\begin{eqnarray}
+Sim (A, B)=\frac{log PT (common (A, B))}{log PT (description (A, B))}
+\end{eqnarray}
+
+Sweeney and her colleagues~\cite{sweeney2002achieving} developed it to calculate similar accuracy rates for the entire table PT and RT. The definition of the data source accuracy model can be used as the result of the source result.
+
+
+\begin{definition}[Data traceability accuracy model]\label{def9} 
+Let $RD (A_1, ..., A_{N_a})$ be resource data, and $t_{P_j} \in RD, PD (A_1, ..., A_{N_a})$ is processed by the l-diversity algorithm After the published data, in $t_{P_j}\in PT$, $DGH_A$ represents the generalization process of data A, and $f_i'$ is the operation function A. The accuracy rate $Prec (PT)$ is calculated as follows:
+	\begin{eqnarray}
+	Prec (PT, RT)=1-\frac{\sum_{i=1}^{N_A} \sum_{j=1}^N \frac{h}{|DGH_{A_i}|}}{|RT|\bullet|N_A|}
+	\end{eqnarray}
+\end{definition}
+
+In this formula, $f_1 (\dots f_h (t_{P_j} [A_i ])\dots )=t_{R_j} [A_i]$.
+
+If $ RT = PT $, each value in the table tree is distributed at the lowest level of the $ DGH_A $ tree, so the height of the general tree h is 0, so $ Prec (RT) = 1 $. Conversely, if every value in the generated $ DGH_A $ tree is at the highest point, then h in the upper layer is the tuple $ | DGH_ {A_i} | $. The accuracy of the entire published data, $Prec (PT)=0$.
+
+
+Sweeney~\cite{sweeney2002achieving} is recommended to calculate the data loss formula as:
+\begin{equation}
+\begin{array}{ll}
+DL_{CO} (x, x')= \\
+\left\{
+\begin{array}{ll}
+\frac{\left(x_{\max }-x_{\max }\right)+\left(x_{\min }-x_{\min }\right)}{\max \{A\}-\min \{A\}} & \max \{A\}+\min \{A\} \\
+0 & \max \{A\}-\min \{A\}
+\end{array}
+\right.
+\end{array}
+\end{equation}
+
+In this formula, $A [x']$ represents the attributes of $A [x]$ after generalized processing. $ A [x '] _ {max} $ represents the maximum range of [x]. Conversely, $ A [x']_{min} $ represents the minimum range of $ A [x] $. Finally, $max\{ A \}$ represents the maximum value of A, and $min\left \{ A \right \}$ represents the minimum value of A. The formula Sweeney~\cite{sweeney2002achieving} shows the relationship between maximize margin and minimize margin.  
+
+However, her formula only deals with how much data is lost in the generalized process. When the generalized process is interrupted by an attacker, the above method can ensure that data will not be lost under certain conditions. In order to be able to measure the results successfully, I must consider some conditions including data that changes in the generalized process. This formula calculates the generalized result as a non-zero result. For example, high school-middle school, the generalized height is 2 (the height of high school is 1 and the middle school is 2), the height of the generalized tree is 3 (the tree is the first in the school, the second is the middle school and the third is the high school), the data is lost The rate is 2/3 (because both middle school and high school are lost). However, if there is no generalization in high school, the height of the word is still 1 (only high school exists). The overall height of the generalized tree is 3 (the tree is the first in the school, the second is the middle and the third is the high school), and the data loss rate is 1/3 (only the word high school may be lost). However, the term "high school" has no real data loss (since high school does not have any generalization, there is no widespread opportunity to lose). I tried to improve the measurement change of the height ratio in the tree to correct the error of the change rate before and after normalization. The formula is improved as:
+
+\begin{eqnarray}
+DL_{CO} (A, B )=\begin{cases} \dfrac { h_{A+B}-h_B}{ h_B-h_A }  \quad \ \ &
+h_{A+B} \ne 0\\
+0 \quad \ \ &
+h_A = 0 \\
+\end{cases}
+\end{eqnarray}
+
+In this formula, $ h_A $ is the height of the generalized tree, $ h_ {A + B} $ is the changing height of attributes A and B, and $ h_ {B} $ is the height of the spanning tree $ B $, if $h_A=0$, $DL = 0$. The summary of the two formulas, the DL formula of data source D is:
+
+\begin{eqnarray}
+\begin{aligned}
+DL (D, D')=\sum_{ \forall A_{CO}} \sum_{i=k}^n t_{A_{CO}}  \bullet DL (A_{CO}[i], A_{CO}[i]') \\
++\sum_{\forall A_{CO}} \sum_{i=1}^n w_{A_{CO}}\bullet DL (A_{CO} [i], A'_{CO} [i])  \quad
+\end{aligned}
+\end{eqnarray}
+
+In the above formula, $ A_{CO} $ is a numeric attribute, $ A'_{CO} $ is a categorical attribute, n is an integer of the data record, $t_{A_{co}}$, $t_{A_{ca}}$ is the weight of $ A_ {CO} $ and $ A '_ {CO} $ respectively, and the value of t is calculated by the formula:
+\begin{eqnarray}
+\sum_{\forall A_{CO}} t_{A'_{CO}}+\sum_{\forall A_{CO}} t_{A_{CO}} =1
+\end{eqnarray}
+The above explains the information loss model of the l-distribution algorithm and the method of improving generalized accuracy.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Normalized Control Penalty method(NCP)}
+We need to reconstruct the original data set, and we need to classify it during the reconstruction. Therefore, the classification metric matrix CM (Classification Metric)~\cite{dalvi2007efficient} needs to be formed, and the discernible metric matrix DM (Discernibility Metric) ~\cite{bayardo2005data} is needed to measure the cardinality of the anonymous group. At the same time, through the generalized loss matrix~\cite{dalvi2007efficient}. In 2006, Xu introduce the generalized deterministic penalty method~\cite{xu2006utility} to control the classification result. However, their approach can not insert the current Condition Random Field.
+So we introduce a new method named The Normalized Control Penalty method (NCP), it can measure the loss information with acceptable accurate rate. In the case of classification attributes, the Normalized Control Penalty method(NCP) is defined relative to the hierarchy.
+
+Deterministic punishment methods NCP mainly has several methods:
+\begin{enumerate}
+	\item{\bf Practicality measure matrix for numerical attributes}: Consider table T with quasi-identifiers $ (A_1, ..., A_n) $. Suppose the tuple $ t = (x_1, ..., x_n) $ is generalized to the tuple $ t '= ([y_1, z_1], ..., [y_n, z_n]) $, making $ y_i $ Then, we define the normalized deterministic penalty (NCP) of the tuple t for the attribute $ A_i $:
+	\begin{eqnarray}\label{equ:ncpai}
+	NCP_{A_i}(t)= \frac{\{z_i\}-\{y_i\}}{\{x_i\}-\{y_i\}}
+	\end{eqnarray}
+	, where it has
+	\begin{eqnarray}\label{equ:ncpai2}
+		|A_i| = \max_{t \in T} t.A_i - \min_{t \in T} t.A_i 
+	\end{eqnarray}
+
+
+	\item{\bf The utility metric matrix of classification attributes}: The generalization of classification attributes usually follows a hierarchical tree, which specifies attribute values with different regularities‘. 
+	Assuming that the tuple t has a value v for the classification attribute $ A_i $, then v is generalized to the set of values $v_1,...,v_m$. We find that the ancestors $v1,\dots,vm$ are represented in the hierarchy tree Common ancestors of $(v_1,...,v_m)$ and use ancestor $(v_1,...,v_m)$ which is the number of leaf nodes that are descendants of ancestor $(v_1,...,v_m)$ To quantitatively measure generalization. here:
+	\begin{eqnarray}\label{equ:ncpat}
+	NCP_{A_i}(t)= \frac{|ancestor(v_1,\dots,v_m)|}{A_i} 
+	\end{eqnarray}
+	$|A_i|$ is the number of different values of $ A_i $ in the most specific level.
+\end{enumerate}
+
+Intuitively, for the numerical attributes $ A_i $,$ NCP_{A_i} (t) $ can measure how much t generalized on the attribute $ A_i $ can measure the generalized interval size; for the classification attributes $ A_i $,$ NCP_{ A_i} (t) $ measures how much t is generated on $ A_i $ in terms of the number of different values covered by the generalized value. Considering both numeric and classification attributes, we define the weighted normalization of tuple t to determine the penalty value.
+
+\begin{eqnarray}\label{equ:tlpat}
+NCP(t)= \sum^{n}_{i=1}(w_i\cdot NCP_{A_i}(t)), and  \sum^{n}_{i=1} w_i = 1
+\end{eqnarray}
+In addition, the weighted normalized positive penalty of Table T is defined as
+\begin{eqnarray}\label{equ:ncptl}
+NCP(T) = \sum_{t \in T} NCP(t)
+\end{eqnarray}
+Since in many data analysis applications, different attributes may have different utility, we assign a weight to each attribute to reflect. 
+
+
+the different importance of attributes. Therefore, NCP (t) is a weighted sum of normalized deterministic costs for all attributes. The deterministic penalty on the entire table is the sum of the penalties for all tuples.
+
+Let $ p $ be the item in $ I $. There are:
+\begin{eqnarray}\label{equ:ncpps}
+NCP(p)= \left\{
+\begin{aligned}
+0, & & & |u_p|=1 \\
+\frac{|u_p|}{I} & & & otherwise
+\end{aligned}
+\right.
+\end{eqnarray}
+
+\begin{figure*}[ht]
+	\centering
+	% Requires \usepackage{graphicx}
+	\includegraphics[width=0.5\textwidth]{images/general2.png}
+	\caption{Noise Prediction on Conditional Random Field}\label{fig:generalpic}
+\end{figure*}
+
+Where $ u_p $ is the node of the item summary hierarchy, where p is the generalization. $ | u_p | $ and $ | I | $ are the number of leaves in $ u_p $ and the entire hierarchy, respectively. Intuitively, NCP attempts to capture the degree of generalization of each item by considering the ratio of its total indistinguishable items in the domain. For example, in the hierarchy of graph~\ref{fig:generalpic}, if (store) is summarized as A in transaction t, the information loss $ NCP (a_1) $ is $\frac{2}{4}$. The NCP of the entire data uses the ratio of the appearance of items affected by the total items in the database to weight the information loss of each broad item. If the total number of occurrences of the item $ p $ in the database is $ C_p $, the loss of information in the entire database due to generalization can be expressed as:
+
+\begin{eqnarray}\label{equ:ncpd}
+NCP(D)= \frac{\sum_{p\in I}C_p \cdot NCP(p) }{\sum_{p\in I}C_p}
+\end{eqnarray}
+
+The information loss for a particular generalization (slice) ranges from 0 to 1, and the range of noise can be measured easily. If we scan dataset D once and remember the support of all items in $ I $, we can use this information to measure any generalized information loss without having to access the database again. For example, the information loss due to cutting $\{a_1,a_2\}\longrightarrow A$ in the database in Figure~\ref{fig:generalpic} is $\frac{2\times0.5+3\times0.5+0+0}{11}= \frac{2.5}{11}$.
+
+\begin{table}[thp!]
+	\centering
+	\caption{Calculation table of information loss during generalization}\label{table:generaltpl}
+	\renewcommand{\arraystretch}{1.5}
+	\begin{tabular}{
+			p{0.1\textwidth}<{\centering}p{0.1\textwidth}<{\centering}
+			p{0.1\textwidth}<{\centering}p{0.1\textwidth}<{\centering}
+			p{0.1\textwidth}<{\centering}}
+		\Xhline{1.2pt}
+		$t_1$   &  $t_2$   &   $t_3$  &   $t_4$\\
+		\Xhline{1.2pt}
+		\{Shop, crispy potato chips, shop\}  &  \{Shop, Crisp Potato Chips\}  & \{Shop, crispy potato chips, small potato chips\} & \{Small shops, shops, small potato chips\} \\
+		\Xhline{1.2pt}
+		$t'_1$   &  $t'_2$   &   $t'_3$  &   $t'_4$\\
+		\Xhline{1.2pt}
+		\{Snacks and groceries, crispy potato chips, small potato chips\}  &  \{Snacks and groceries, crispy potato chips\}  & \{Crisp Potato Chips, Crisp Potato Chips, Small Potato Chips\} & \{Snacks and groceries, small potato chips\} \\
+	\end{tabular}
+\end{table}
+
+In addition, we introduced more specialized information loss measures for NCP, reflecting the impact of anonymization on the data mining results of anonymous data. Multi-level mining loss (ML2) measurement represents the loss of information in the detection of multi-level frequent item sets when mining a published data set instead of the original data set. Mining data sets at multiple levels of the generalization level is a technique that attracts the interest of data mining literature because it allows detection of frequent association rules and frequent item sets that may not appear in data mining documents. The most detailed data level. For example, suppose we have a data set describing supermarket sales. When using raw data containing items of the most detailed product level, we may not detect any interesting frequent itemsets that associate specific skimmed milk products with specific types of cookies. However, if we generalize the data (or move to a higher level of abstraction in the term~\cite{han1999mining}), we may infer that "snacks and groceries" and "crisp potato chips" frequently appear together. When using a generalization-based method to anonymize the original data, the frequent itemsets at the lower level of the hierarchical structure can be hidden, and the correlation between items can only be detected at the higher level. ML2 represents the percentage of all frequent item sets that do not appear at the appropriate level of induction when the multi-level mining algorithm is applied to the published data set instead of the original data set. The formula is:
+
+\begin{eqnarray}\label{equ:ML2}
+ML^2= 1 - \frac{\sum^h_i FI_i(D_p) }{\sum^h_i FI_i(D)}
+\end{eqnarray}
+In the formula~\ref{equ:ML2} $ FI_i $ (returns the number of frequent item sets of generalization level i), $ D_p $ and $ D $ represent the published and original data sets respectively.
+
+We can further strengthen the observation of information loss in multi-level data mining by tracking the difference between the generalization level of frequent items that appear in the original data and its generalization level that first appeared in published data. For example, suppose that in a dataset with supermarket sales, it can be inferred that "thin crisps" and "store" appear together at some hierarchical level l. Because such frequent item sets appear in level l, the generalized form of more item sets should appear in all levels l 'and have $ l'>l $. In an anonymous data set, generalization may hide the association "small potato chips" or "store", so the item set representing this correlation may first be generated as an array at the level of $l+d$ generalization {'fat milk', ' Cookies'}. The difference d between the level l and the level $l+d$ of the frequency item set in the original data Information loss formula (dML2):
+\begin{eqnarray}\label{equ:dML2t}
+dML^2= \frac{\sum^h_i\sum_{fi\in FI_i(D)} d_{level} (fi,D,D_p) }{\sum^h_i FI_i(D)}
+\end{eqnarray}
+
+Where $dlevel(fi,D,D_p)$ returns the level between the generalization level where the frequent item set $ fi $ first appeared in the original data D and the generalization level where the same frequent item set or its more general form first appeared Poor, appears in the published data $ D_p $. $FI_i(D)$ is the set of all frequent item-sets of level i in D, and $FI_i(D)$ is their total number. Note that if some items can already generate a common root, the generalized form of frequent item sets can have a smaller item set than the original.
+
+\subsection{Integrity and consistency check}
+Although accuracy is a relatively general parameter, because it can be measured without strong assumptions about the analyzed data set, completeness is not that general. For example, in some privacy protection data mining strategies, blocking and integrity evaluation are not significant. On the other hand, consistency requires determining all relationships related to a given data set.
+
+In~\cite{bertino2005information}, Bertino et al. Propose a set of evaluation parameters, including completeness and consistency evaluation. Unlike other technologies, their approach considers two more important aspects: the relevance of the data and the structure of the database. They provide an interesting aggregation information that can be used to amplify the target database and the correlation of the data quality attributes of each aggregation information and the formal description of each attribute involved in the aggregation information. Specifically, the lack of integrity (expressed as CML) is measured as follows:
+
+
+\begin{eqnarray}\label{equ:CMLdet}
+CML = \sum{DMG.N_i.CV \times DMG.N_i.CW}
+\end{eqnarray}
+In the equation~\ref{equ:CMLdet}, DMG is a directed graph, where each node $ {N_i} $ is an attribute class. CV is the integrity value and CW is the consistency value. The lack of consistency (expressed as CSL) is given by the number of constraint violations that occurred in all sanitized transactions times the weight associated with each constraint.
+\begin{eqnarray}\label{equ:CSLdet}
+\begin{aligned}
+CSL = \sum{DMG.SC_i.csv \times DMG.SC_i.cw} \\
++ \sum{DMG.CC_j.csv \times DMG.CC_j.cw}
+\end{aligned}
+\end{eqnarray}
+
+In the equation~\ref{equ:CSLdet}, csv represents the number of violations, cw is the weight of the constraint, $ SC_i $ describes the simple constraint class, and $ CC_j $ describes the complex constraint class.
+
+In some cases, it may be useful and more relevant to assess the quality of data mining results after the cleaning process. This metric is strictly related to the use of data. Data can be analyzed in order to mine information based on associations between individual data items or to classify existing data for targets that find accurate classification of new data items, and so on. Based on the expected data usage, a specific metric is used to measure the information loss, which depends on the specific type of knowledge model that is intended to be extracted each time.
+
+If the expected data usage is data clustering, the information loss IL can be measured by the percentage of legitimate data points that are not well classified after the purification process. For example, the misclassification error $ M_E $ is defined in~\cite{oliveira2010privacy} to measure information loss.
+\begin{eqnarray}\label{equ:Medet}
+M_e = \frac{1}{N} \sum^{k}_{i=1} (|Cluster_i(D)|-|Cluster_i(D')|) 
+\end{eqnarray}
+
+Where N represents the number of points in the original data set, k is the number of clusters analyzed,  $|Cluster_i(D)|$ is represent the legality of the i-th cluster in the original data set and $|Cluster_i(D')|$  is the number of data points, and the purified data set D'. Since privacy protection technologies usually modify data for cleaning purposes, the parameters involved in cluster analysis are almost inevitably affected. In order to achieve high clustering quality, it is very important to keep the clustering results as consistent as possible before and after applying data hiding techniques.
+
+When quantifying information loss in the context of other data usage, distinguish: it is useful to indicate the percentage of missing information that is a non-sensitive pattern (ie, association, classification rule) that is a side effect of the hiding process. In addition, the extract information indicate the privacy adopted manual extra information that protects the percentage of manual modes created by technology. For example, in~\cite{oliveira2002privacy}, Oliveira and Zaiane define two measures to detect the missed cost via manual mode. In their paper, the missed cost is corresponding to the missing information and manual information, respectively. In particular, the cost of leakage measures the percentage of non-limiting patterns hidden after the disinfection process. This happens when some non-limiting modes lose support in the database due to the cleaning process. The cost of failure (MC) is calculated as follows:
+
+\begin{eqnarray}\label{equ:MCdet}
+MC = \frac{T~R_p(D)-T~R_p(D')}{T~R_p(D)}
+\end{eqnarray}
+
+Where $T~R_p(D)$ and $T~R_p(D')$ represent the number of unrestricted patterns from the original database D and the purified database D', respectively. In the best case, MC should be 0 \%. Note that there is a trade-off between the cost of failure and the hidden failure in its method. The more restrictive patterns they hide, the more legitimate patterns they miss. The other measurement matrix and manual mode (AP) are measured according to the percentage of the discovery mode as artifacts. The formula is:
+\begin{eqnarray}\label{equ:APdet}
+AP = \frac{|P'|}{T~R_p (D)}
+\end{eqnarray}
+Where $\|X\|$ represents the absolute value of X. According to their experiments, if the method does not have any artificial pattern, the AP is always 0.
+
+In the case of association rules, the lost information can be modeled as a collection of non-sensitive rules called lost rules that are accidentally hidden by privacy protection technology, while artificial information represents the set of new rules, also known as ghost rules, which It can be extracted from the database after applying data cleaning technology. Similarly, if the purpose of the mining task is data classification, for example, induced by a decision tree, the loss and artificial information can be quantified by the corresponding loss and ghost association rules derived from the classification tree. These measures allow the high-level information extracted from the database to be evaluated in the form of widely used inference rules before and after applying privacy protection data mining algorithms.
+
+It is worth noting that for most encryption-based privacy-protected data mining algorithms, the results of data mining are the same as those produced by unnormalized data.
+
+
+\subsection{top-K deviation(tKd) for abstract Extraction}
+The separation process can hide unusual combinations of sensitive segments, so the information loss that occurs is related to the combination of terms that existed in the original dataset but were lost in the disassociated dataset. To assess the impact of information loss, we examine the behavior of common mining and query operations on transformed data. In this paper, we use common metrics to compare the data anonymization methods, those methods using different data transformations approach, such as generalization, suppression, and differential privacy. More specifically, we check how much of the frequent item set that exists in the original data is retained in the published data, and also measure the relative error in the supported estimate of the measured item pair.
+
+
+Top-K deviation, that is tKd, tKd metric can change the first k frequent items in the original data set in the published anonymous data. Let $ FI $ (respectively $ FI '$) be the top K frequent item sets in the original data set (respectively anonymous data sets). tKd is defined as follows:
+
+\begin{eqnarray}\label{equ:tkd2xdfg}
+tKd= 1 - \frac{|FI\cap FI'|}{FI} 
+\end{eqnarray}
+
+Intuitively, tKd is the ratio of the original data set and the top k frequent itemsets in the top k frequent itemsets of anonymized data.
+
+To compare the separation and generalization-based methods, we define $ tKd-ML2 $ as the top-k multi-level mining loss , which is based on the $ ML2 $ metric defined in~\cite{terrovitis2008privacy}. Mining data sets at multiple levels of the generalization level is an established technique~\cite{han1995discovery}, which allows detection of frequent association rules and frequency item sets that may not appear in the most detailed level of data. If there is a generalization level that allows data anonymization, it can be assumed that the same level can be used to mine the frequency item sets that appear in published and original unpublished data at different levels of abstraction. tKd-ML2 is given by the formula~\ref{equ:tkd2xdfg}, but in this case, FI and FI 'are sets of generalized frequency item sets, which can be traced back in the original and anonymous data. If the generalized frequency item set has been generated in the higher-level generalization process during the anonymization process, the information will be discarded according to the characteristics of the anonymous algorithm. Although the reconstructed data set does not contain any generalized items, if a generalized generalized structure is given, in theory, the information that is lost or discarded can be obtained by mining the frequency item set.
+
+Relative error ($ re $) indicator. This indicator (used in~\cite{chen2011publishing}) is used to measure the relative error in the support of term combinations in published data. Due to the large number of possible combinations, in order to reduce unnecessary work, we will limit the combination formed by only two teams of phrases as a sign of the quality of the data set. In this case, generating several particularly many combinations usually does not occur frequently, and the situation of very frequent combinations has been covered by tKd. The relative error formula is as follows:
+
+\begin{eqnarray}
+re = \frac{|s_o(a,b) - s_p(a,b)|}{AVG(s_o(a,b),s_p(a,b))} 
+\end{eqnarray}\label{re2}
+
+Among them, $ s_o (a, b) $ and $ s_p (a, b) $ are support for the combination of the terms (a, b) in the original data and published data, respectively. Reconstructing an anonymous data set may introduce a new portfolio of items into the published data, which does not exist in the original data. To account for this situation in the definition of relative error, we use the two supported averages as the denominator instead of using the original $ s_o (a, b) $. The average value has a smoothing effect on the metric because it normalizes re to an array of (0, 2) and avoids infinite values when divided by 0.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The experiments for noise generalization}
+We have $\mathbb{B}=\mathcal{H}^2 [0,1]$ to investigate the effect of parameters on the using of sanitizer. We consider the problem of estimating average performance from a random sample of functional observations using RKHS smoothing, for Reproducing Kernel Hilbert Space $\mathcal{H}$,  
+
+\begin{equation}
+    \mathcal{H}(x,y)=exp\{\frac{-|x-y|^2}{\delta}\}
+    \label{eq: RKHS}
+\end{equation}
+\begin{equation}
+  X_i (t)=\mu(t)+\Sigma_{j=1}^m {j^{-\frac{2}{p}} U_{ij} v_j (t)},  \in [0,1]
+  \label{eq: RKHSSmo}
+\end{equation}
+
+In eq.~\eqref{eq: RKHSSmo} and eq.~\eqref{eq: RKHS}, $x$ and $y$ represent input data sets in the space $\mathcal{H}$, $\delta$ means the risk is fixed by choosing the $\varepsilon$ and $\delta$ in the definition of differential privacy. All comparisons include privacy restrictions $\varepsilon$ and other factors occur on a grid of equal distances between 0 and 2 with 5 points, and the RKHS kernel and sound kernel are the same $(\delta=0.1)$. Kernel $\mathcal{H}$ range parameter is used to define $\rho=0.001$ is taken and the parameter of $X_i (t)$ is set at $p = 4$. The median function, data sample size, and differential privacy parameters are set to $\mu(t)=0.1 sin(\pi t),N=25, (\varepsilon=1,\delta=0.1$), respectively. We change the penalty parameter $\rho$ effect from $10^{-6}$ , $0.001$ to $0.1$, can generate follow figures.
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.5\textwidth]{images/Gaussian Kernel for different penalty parameter with original and private RKHS means1.png}
+\caption{Gaussian Kernel for different penalty parameter $\rho=10^{-6}$ with original and private Wiener Space means} \label{fig:GaussianKernel}
+\end{figure}
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.5\textwidth]{images/Gaussian Kernel for different penalty parameter with original and private RKHS means2.png}
+\caption{Gaussian Kernel for different penalty parameter $\rho=10^{0.001}$ with original and private Wiener Space means} \label{fig:GaussianKernel2}
+\end{figure}
+
+\begin{figure}[htbp!]
+\centering
+\includegraphics[width=0.5\textwidth]{images/Gaussian Kernel for different penalty parameter with original and private RKHS means3.png}
+\caption{Gaussian Kernel for different penalty parameter $\rho=10^{0.1}$ with original and private Wiener Space means} \label{fig:GaussianKernel3}
+\end{figure}
+
+From Figure~\ref{fig:GaussianKernel} to Figure~\ref{fig:GaussianKernel3}, we see the comparison between the original and private Wiener Space means, $x$ and $y$ axes are time $t$ and $\chi$ square $\chi_i(t)$ separately. Private mean is sanitized by the developed methods in previous part. As penalties increase, the two assumptions fall into one another and the gap from 0 to 0.6 becomes zero. In terms of utilities, it can be seen that, when $\rho$ increases, the amount of noise is reducing. This experiment has  explored the relationship between the penalty parameter $\rho$  and noise data generated by $K(x,\cdot)=\Sigma_{i=1}^\infty \lambda_i \psi_i (x) \varphi_i$, which is approach to origin data. However, it is not meaning increase penalty parameter is only option to improve performance for the framework. Moreover, some attacks might observe that, if the noise data is very similar to the origin data, the data could be mimicked and attacked by using the Generative adversarial network (GAN) approach\cite{xu2019ganobfuscator}. If the penalty parameter value is small, the noise data may impact on the training divergence in next step of federated machine learning So, we need to tune the penalty parameter according to the conditions of $2_{nd}$ step on federated machine learning and $3_{rd}$ step of training results’ privacy preserving. 
+
+\subsection{Testing Degree Distribution}
+In the second set of experiments,we demonstrated the effectiveness of disinfection data on the degree distribution,measured by KL-divergence. Figure~\ref{fig:12} shows the KL-divergence of all datasets with different privacy budgets of k = 1. Due to the large KL-divergence from Laplace 6,better visibility is excluded from the figure. We can observe that our method is suitable for preservation degree distribution. NCP's KL-deviation is very small in all settings. Without array boundary processing algorithms,CRF cannot accurately reconstruct the leaf region,thus resulting in a less accurate degree distribution.
+	
+
+
+
+\begin{figure*}[htp!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/12.png}
+	\caption{Comparison of degree distribution and related parameter k}\label{fig:12}
+\end{figure*}
+
+\begin{figure*}[htp!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/13.png}
+	\caption{Comparison of degree distribution and sampling steps}\label{fig:13}
+\end{figure*}
+	
+Figure~\ref{fig:12} Check the KL-divergence used to change the relevant parameters,$ \epsilon = 1.0 $. Although approach NCP's KL-divergence increases rapidly with correlation,it can still retain the general degree of distribution on the data sets (eg,ca-GrQC and caHepTh) even when k = 25.
+	
+In Figure ~\ref{fig:13},we show the KL divergence of four data sets at different sampling steps at a fixed time,$ \epsilon = 1.0 $ and $ k = 1 $. We can observe again that sampling has little effect on the degree distribution. In addition,a trend similar to that of the count query can be observed. Given a privacy budget that is not too small,if the underlying data set is sparse,it is often beneficial to employ sampling techniques.
+	
+\subsubsection{Testing of shortest path length}
+The shortest path length is one of the most robust measures of network topology. Our next set of experiments proves that NCP under the federated stochastic gradient descent is also effective for maintaining the shortest path length. Similar to the experimental setup of~\cite{cheng2010k},we randomly selected 500 pairs of vertices and compared the distribution of the shortest path length between the disinfected data set and the original data set.
+	
+	\begin{figure*}[htbp!]
+		\centering
+		\includegraphics[width=1.0\textwidth]{images/14.png}
+		\caption{The distribution of the shortest path length of different methods}\label{fig:14}
+	\end{figure*}
+	
+	
+Figure~\ref{fig:14} shows the distribution of the shortest path length of different methods,$ \epsilon = 1.0,k = 1 $. The "-1" on the X axis indicates that the vertex pairs are not connected (that is,the length is $ \infty $). It can be seen that NCP has a close distribution on all the cleaned data sets. Similar to previous observations,neither Laplace nor random can retain the useful shortest path length distribution. Laplace gives a similar distribution for all data sets. If no edge process is arranged,NCP cannot retain the shortest path length distribution. Its performance is similar to randomness on all data sets. Our experimental results conclude that arranging edges is critical to achieve the desired utility on different data analysis tasks.
+	
+	\begin{figure*}[htbp!]
+		\centering
+		\includegraphics[width=1.0\textwidth]{images/15.png}
+		\caption{Shortest path length and privacy budget-distribution of $\epsilon$}\label{fig:15}
+	\end{figure*}
+
+\begin{figure*}[htbp!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/16.png}
+	\caption{Distribution of the shortest path length and related parameter k}\label{fig:16}
+\end{figure*}
+
+\begin{figure*}[htbp!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/17.png}
+	\caption{Distribution of shortest path length to sampling step}\label{fig:17}
+\end{figure*}
+	
+
+We also study the performance of NCP under the federated stochastic gradient descent algorithm to the shortest path length of other parameters. Figure~\ref{fig:15} presents the shortest path length distribution under different privacy budgets,from which it can be observed that a larger privacy budget gives a more similar distribution. Figure~\ref{fig:16} gives the distribution under varying correlation parameters,where we can observe that a larger correlation leads to a poor utility. Figure~\ref{fig:17} shows the distribution under various sampling steps. Generally,NCP performs stably under different parameter settings.
+
+\subsection{Utility analysis of Degree Distribution}
+
+\begin{figure*}[htbp!]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/18.png}
+	\caption{Comparison of cut query and degree distribution}\label{fig:18}
+\end{figure*}
+
+
+According to the complexity analysis of NCP,its running time is controlled by $ | V | $. Therefore,we propose that the running time value of NCP under different $ | V | $ is shown in Figure~\ref{fig:18}. The test set is generated by randomly extracting subsets from the original data set. The X axis represents the percentage of the test set $ | V | $ relative to the value of the original data set. It can be seen that the approximate running time and the second increase of $ | V | $ confirms our theoretical analysis.
+
+
+\section{Conclusion}
+In short, when processing the cut queries in database, the paper process the query data into cache, then using Differential  privacy  algorithm  using  federated stochastic gradient descet with NCP approach. is a better choice; for degree distribution and shortest path length,the data publisher can choose a solution based on his privacy requirements (node re-identification or edge disclosure). If runtime requirements are critical,then NCP is a better choice.
+% if have a single appendix:
+%\appendix[Proof of the Zonklar Equations]
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to start each appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+%
+
+\begin{comment}
+
+
+\appendices
+\section{Proof of the First Zonklar Equation}
+Appendix one text goes here.
+
+% you can choose not to have a title for an appendix
+% if you want by leaving the argument blank
+\section{}
+Appendix two text goes here.
+
+
+% use section* for acknowledgement
+\section*{Acknowledgment}
+
+
+The authors would like to thank...
+
+\end{comment}
+% Can use something like this to put references on a page
+% by themselves when using endfloat and the captionsoff option.
+\ifCLASSOPTIONcaptionsoff
+  \newpage
+\fi
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,ref}
+
+% biography section
+%
+% If you have an EPS/PDF photo (graphicx package needed) extra braces are
+% needed around the contents of the optional argument to biography to prevent
+% the LaTeX parser from getting confused when it sees the complicated
+% \includegraphics command within an optional argument. (You could create
+% your own custom macro containing the \includegraphics command to make things
+% simpler here.)
+%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
+% or if you just want to reserve a space for a photo:
+\begin{comment}
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{images/boma.jpg}}]{Bo Ma}
+Ma is working toward the PhD degree in the Department of Information Technology and Software Engineering, School of Engineering, Computer and Mathematical Sciences at the Auckland University of Technology, Auckland, New Zealand. His research interest is Cybersecurity for various networks and systems in general, specially focus on privacy-preserving federated machine learning methods, privacy issues of Big Data analytics and Internet of Things, and information theory of deep learning. He obtained his MSc in Computer Software and Theory, and
+Bachelor in Electronic Commerce from Sichuan Normal University, China.
+\end{IEEEbiography}
+
+
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{John Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% insert where needed to balance the two columns on the last page with
+% biographies
+%\newpage
+
+\begin{IEEEbiographynophoto}{Jane Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+\end{comment}
+% You can push biographies down or up by placing
+% a \vfill before or after them. The appropriate
+% use of \vfill depends on what kind of text is
+% on the last page and whether or not the columns
+% are being equalized.
+
+%\vfill
+
+% Can be used to pull up biographies so that the bottom of the last one
+% is flush with the other column.
+%\enlargethispage{-5in}
+
+
+
+% that's all folks
+\end{document}
+

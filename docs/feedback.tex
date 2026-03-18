@@ -1,0 +1,210 @@
+\def\year{2022}\relax
+%File: formatting-instructions-latex-2022.tex
+%release 2022.1
+\documentclass[letterpaper]{article} % DO NOT CHANGE THIS
+\usepackage{aaai22}  % DO NOT CHANGE THIS
+\usepackage{times}  % DO NOT CHANGE THIS
+\usepackage{helvet}  % DO NOT CHANGE THIS
+\usepackage{courier}  % DO NOT CHANGE THIS
+\usepackage[hyphens]{url}  % DO NOT CHANGE THIS
+\usepackage{graphicx} % DO NOT CHANGE THIS
+\urlstyle{rm} % DO NOT CHANGE THIS
+\def\UrlFont{\rm}  % DO NOT CHANGE THIS
+\usepackage{natbib}  % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+\usepackage{caption} % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+\DeclareCaptionStyle{ruled}{labelfont=normalfont,labelsep=colon,strut=off} % DO NOT CHANGE THIS
+\frenchspacing  % DO NOT CHANGE THIS
+\setlength{\pdfpagewidth}{8.5in}  % DO NOT CHANGE THIS
+\setlength{\pdfpageheight}{11in}  % DO NOT CHANGE THIS
+%
+% These are recommended to typeset algorithms but not required. See the subsubsection on algorithms. Remove them if you don't have algorithms in your paper.
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+%
+% These are are recommended to typeset listings but not required. See the subsubsection on listing. Remove this block if you don't have listings in your paper.
+\usepackage{newfloat}
+\usepackage{listings}
+% \lstset{%
+% 	basicstyle={\footnotesize\ttfamily},% footnotesize acceptable for monospace
+% 	numbers=left,numberstyle=\footnotesize,xleftmargin=2em,% show line numbers, remove this entire line if you don't want the numbers.
+% 	aboveskip=0pt,belowskip=0pt,%
+% 	showstringspaces=false,tabsize=2,breaklines=true}
+% \floatstyle{ruled}
+% \newfloat{listing}{tb}{lst}{}
+% \floatname{listing}{Listing}
+%
+%\nocopyright
+%
+% PDF Info Is REQUIRED.
+% For /Title, write your title in Mixed Case.
+% Don't use accents or commands. Retain the parentheses.
+% For /Author, add all authors within the parentheses,
+% separated by commas. No accents, special characters
+% or commands are allowed.
+% Keep the /TemplateVersion tag as is
+% \pdfinfo{
+% /Title (AAAI Press Formatting Instructions for Authors Using LaTeX -- A Guide)
+% /Author (AAAI Press Staff, Pater Patel Schneider, Sunil Issar, J. Scott Penberthy, George Ferguson, Hans Guesgen, Francisco Cruz, Marc Pujol-Gonzalez)
+% /TemplateVersion (2022.1)
+% }
+
+% DISALLOWED PACKAGES
+% \usepackage{authblk} -- This package is specifically forbidden
+% \usepackage{balance} -- This package is specifically forbidden
+% \usepackage{color (if used in text)
+% \usepackage{CJK} -- This package is specifically forbidden
+% \usepackage{float} -- This package is specifically forbidden
+% \usepackage{flushend} -- This package is specifically forbidden
+% \usepackage{fontenc} -- This package is specifically forbidden
+% \usepackage{fullpage} -- This package is specifically forbidden
+% \usepackage{geometry} -- This package is specifically forbidden
+% \usepackage{grffile} -- This package is specifically forbidden
+% \usepackage{hyperref} -- This package is specifically forbidden
+% \usepackage{navigator} -- This package is specifically forbidden
+% (or any other package that embeds links such as navigator or hyperref)
+% \indentfirst} -- This package is specifically forbidden
+% \layout} -- This package is specifically forbidden
+% \multicol} -- This package is specifically forbidden
+% \nameref} -- This package is specifically forbidden
+% \usepackage{savetrees} -- This package is specifically forbidden
+% \usepackage{setspace} -- This package is specifically forbidden
+% \usepackage{stfloats} -- This package is specifically forbidden
+% \usepackage{tabu} -- This package is specifically forbidden
+% \usepackage{titlesec} -- This package is specifically forbidden
+% \usepackage{tocbibind} -- This package is specifically forbidden
+% \usepackage{ulem} -- This package is specifically forbidden
+% \usepackage{wrapfig} -- This package is specifically forbidden
+% DISALLOWED COMMANDS
+% \nocopyright -- Your paper will not be published if you use this command
+% \addtolength -- This command may not be used
+% \balance -- This command may not be used
+% \baselinestretch -- Your paper will not be published if you use this command
+% \clearpage -- No page breaks of any kind may be used for the final version of your paper
+% \columnsep -- This command may not be used
+% \newpage -- No page breaks of any kind may be used for the final version of your paper
+% \pagebreak -- No page breaks of any kind may be used for the final version of your paperr
+% \pagestyle -- This command may not be used
+% \tiny -- This is not an acceptable font size.
+% \vspace{- -- No negative value may be used in proximity of a caption, figure, table, section, subsection, subsubsection, or reference
+% \vskip{- -- No negative value may be used to alter spacing above or below a caption, figure, table, section, subsection, subsubsection, or reference
+
+\setcounter{secnumdepth}{0} %May be changed to 1 or 2 if section numbers are desired.
+
+% The file aaai22.sty is the style file for AAAI Press
+% proceedings, working notes, and technical reports.
+%
+
+% Title
+
+% Your title must be in mixed case, not sentence case.
+% That means all verbs (including short verbs like be, is, using,and go),
+% nouns, adverbs, adjectives should be capitalized, including both words in hyphenated terms, while
+% articles, conjunctions, and prepositions are lower case unless they
+% directly follow a colon or long dash
+% \title{AAAI Press Formatting Instructions \\for Authors Using \LaTeX{} --- A Guide}
+% \author{
+%     %Authors
+%     % All authors must be in the same font size and format.
+%     Written by AAAI Press Staff\textsuperscript{\rm 1}\thanks{With help from the AAAI Publications Committee.}\\
+%     AAAI Style Contributions by Pater Patel Schneider,
+%     Sunil Issar,\\
+%     J. Scott Penberthy,
+%     George Ferguson,
+%     Hans Guesgen,
+%     Francisco Cruz\equalcontrib,
+%     Marc Pujol-Gonzalez\equalcontrib
+% }
+% \affiliations{
+%     %Afiliations
+%     \textsuperscript{\rm 1}Association for the Advancement of Artificial Intelligence\\
+%     % If you have multiple authors and multiple affiliations
+%     % use superscripts in text and roman font to identify them.
+%     % For example,
+
+%     % Sunil Issar, \textsuperscript{\rm 2}
+%     % J. Scott Penberthy, \textsuperscript{\rm 3}
+%     % George Ferguson,\textsuperscript{\rm 4}
+%     % Hans Guesgen, \textsuperscript{\rm 5}.
+%     % Note that the comma should be placed BEFORE the superscript for optimum readability
+
+%     2275 East Bayshore Road, Suite 160\\
+%     Palo Alto, California 94303\\
+%     % email address must be in roman text type, not monospace or sans serif
+%     publications22@aaai.org
+% %
+% % See more examples next
+% }
+
+
+% REMOVE THIS: bibentry
+% This is only needed to show inline citations in the guidelines document. You should not need it and can safely delete it.
+\usepackage{bibentry}
+% END REMOVE bibentry
+
+\begin{document}
+
+\maketitle
+Congratulations on having a paper selected for inclusion in an AAAI Press proceedings or technical report! This document details the requirements necessary to get your accepted paper published using PDF\LaTeX{}. If you are using Microsoft Word, instructions are provided in a different document. AAAI Press does not support any other formatting software.
+
+The instructions herein are provided as a general guide for experienced \LaTeX{} users. If you do not know how to use \LaTeX{}, please obtain assistance locally. AAAI cannot provide you with support and the accompanying style files are \textbf{not} guaranteed to work. If the results you obtain are not in accordance with the specifications you received, you must correct your source file to achieve the correct result.
+
+These instructions are generic. Consequently, they do not include specific dates, page charges, and so forth. Please consult your specific written conference instructions for details regarding your submission. Please review the entire document for specific instructions that might apply to your particular situation. All authors must comply with the following:
+
+\begin{itemize}
+\item You must use the 2022 AAAI Press \LaTeX{} style file and the aaai22.bst bibliography style files, which are located in the 2022 AAAI Author Kit (aaai22.sty, aaai22.bst).
+\item You must complete, sign, and return by the deadline the AAAI copyright form (unless directed by AAAI Press to use the AAAI Distribution License instead).
+\item You must read and format your paper source and PDF according to the formatting instructions for authors.
+\item You must submit your electronic files and abstract using our electronic submission form \textbf{on time.}
+\item You must pay any required page or formatting charges to AAAI Press so that they are received by the deadline.
+\item You must check your paper before submitting it, ensuring that it compiles without error, and complies with the guidelines found in the AAAI Author Kit.
+\end{itemize}
+
+\section{Copyright}
+All papers submitted for publication by AAAI Press must be accompanied by a valid signed copyright form. They must also contain the AAAI copyright notice at the bottom of the first page of the paper. There are no exceptions to these requirements. If you fail to provide us with a signed copyright form or disable the copyright notice, we will be unable to publish your paper. There are \textbf{no exceptions} to this policy. You will find a PDF version of the AAAI copyright form in the AAAI AuthorKit. Please see the specific instructions for your conference for submission details.
+
+\section{Formatting Requirements in Brief}
+We need source and PDF files that can be used in a variety of ways and can be output on a variety of devices. The design and appearance of the paper is strictly governed by the aaai style file (aaai22.sty).
+\textbf{You must not make any changes to the aaai style file, nor use any commands, packages, style files, or macros within your own paper that alter that design, including, but not limited to spacing, floats, margins, fonts, font size, and appearance.} AAAI imposes requirements on your source and PDF files that must be followed. Most of these requirements are based on our efforts to standardize conference manuscript properties and layout. All papers submitted to AAAI for publication will be recompiled for standardization purposes. Consequently, every paper submission must comply with the following requirements:
+
+\begin{itemize}
+\item Your .tex file must compile in PDF\LaTeX{} --- (you may not include .ps or .eps figure files.)
+\item All fonts must be embedded in the PDF file --- including your figures.
+\item Modifications to the style file, whether directly or via commands in your document may not ever be made, most especially when made in an effort to avoid extra page charges or make your paper fit in a specific number of pages.
+\item No type 3 fonts may be used (even in illustrations).
+\item You may not alter the spacing above and below captions, figures, headings, and subheadings.
+\item You may not alter the font sizes of text elements, footnotes, heading elements, captions, or title information (for references and mathematics, please see the limited exceptions provided herein).
+\item You may not alter the line spacing of text.
+\end{itemize}
+
+\section{General Response}
+Dear reviewers, first of all thank you for your suggestions on the paper. We will read them carefully and correct them one by one. The core innovation of this article is that in target tracking, for specific sensitive targets, this article can protect the privacy of specific sensitive targets according to the added privacy budget. Privacy protection is carried out by adding privacy noise, it will inevitably have a negative impact on the accuracy of other targets or related tasks. At the same time, the additional noise overhead, the tracking target may be lost due to interference. Tracking The problem of ID switching is simply that the tracking ID overlaps with the sensitive target area in certain frames, so the tracker cannot track its target and thus loses the tracked target. In the next few frames, the tracker will treat the previously lost target as New goals. In order to reduce this negative impact, this paper proposes a method time series analysis to avoid the above-mentioned problems. This is also the core contribution of this paper, and we hope to answer the questions raised by several judges about unclear contributions.
+
+\section{Reviewer-1 Response}
+Due to the paper page limitation, I have add some of experiments into the supplements materials, which include the privacy leakage tests.The experimental data used in the trajectory tracking task is MOT17-13-FRCNN, MOT17-14-SDP and other vehicle-related image data. The tracking task is the tracking of specified categories, privacy protection is for some specified categories that require privacy protection. The single record in the article is for the tracking ID in the frame and the target area corresponding to its ID.
+
+For information loss, comparing the original data and training results through fusion experiments is still very important to measure the accuracy of the loss function. Regarding the correlation between privacy budget and cost, it is also an assessment of privacy level and accuracy. Because of the limitation of the length of the text, the paper puts the comparison experiment of this parameter in the appendix.
+
+For the evaluation of information loss, it is necessary to compare the original data. This article needs to collect the label corresponding to the original data and the ROI area marked by the label. For model measurement, different levels of privacy budgets to generate corresponding levels of inference results, and the deviations from these results are measured to evaluate the performance of the algorithm proposed in this paper.
+In the experiment, compares several other privacy protection works, including Autoencoder fake Image, SIFT combined with Gaussian noise and other methods, and gives their respective results.
+
+\section{Reviewer-2 Response}
+Thanks to the reviewer for good evaluation and understanding of the contributions. At the same time, We are apologize for not having a good proofreading for this paper.
+
+\section{Reviewer-3 Response}
+For W1, the threat model of the paper mentioned that the solution proposed in the paper is to protect the classification of the designated privacy object in the target tracking task.
+
+For W2, the two attacks mainly prevent the tracking of privacy targets. Therefore, even if the privacy targets are hijacked in the threat model, privacy-related areas cannot be obtained from other content, and features cannot be extracted. Therefore, the threat model has explained Prevention of hijacking attacks. Figure 3 is a description of an algorithm proposed in the paper. The main purpose of the algorithm involved in Figure 3 is to address the problem of tracking ID loss due to the implementation of privacy protection. The algorithm can solve the problem of missing ID and the tracking ID can connect from start frame to end frame.
+
+For W3, the main contribution is to solve the problem of tracking ID loss caused by the implementation of privacy protection in the tracking task. This is the most important part of privacy protection in tracking. In the field of target tracking.
+
+For W4, this paper has revised the content of the contribution part to highlight the novelty of the paper and the importance of contribution points.
+
+\section{Reviewer-4 Response}
+Regarding the readability of the paper, the author has made up and corrected many contents and paragraphs. 
+
+\section{Reviewer-5 Response}
+This paper describes that an attacker modify the trajectory of the objects, which will make the traditional privacy protection method unable to find the correct privacy target that needs to be protected and lose the protection of privacy.
+
+In bio-metric privacy attack, the attacker can also uses hijacking attacks to privacy protection with the wrong objects, and then can extract user privacy features in different frames, such as facial features in different frames. The sensitivity X is for this type of feature, and the bio-metric verifier needs to collect more features for verification, the attacker need to provide those features to cheat the verifier, the higher of sensitive value $x$ the more sensitivity. The conditional random field is to solve the tracking ID loss caused by privacy protection with track hijacking. More experimental comparisons are included in the supplements due to the page limitations.
+\end{document}

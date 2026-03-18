@@ -89,3 +89,5 @@ env/
 
 # LaTeX (title page, cover letter, manuscript – keep out of repo if desired)
 src/latex/
+
+runs/*
